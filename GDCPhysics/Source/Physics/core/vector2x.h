@@ -15,34 +15,26 @@
 class vector2x
 {
 public:
-	int x, y;
+	intx x, y;
 	
 	vector2x()						{	x=y=0;					}
 	vector2x(int xx, int yy)		{	x=xx;	y=yy;			}
 	vector2x(float xx, float yy)	{	x=FTOX(xx);	y=FTOX(yy);	}
 	vector2x(const vector2x& v)		{	x=v.x;	y=v.y;			}
     vector2x(const vector2f& v)     {   x=FTOX(v.x); y=FTOX(v.y);   }
-	
 	~vector2x(){}
 	
 	void operator=(const vector2x& v)	{	x=v.x; y=v.y;	}
-
     bool operator==(const vector2x& v)	{	return (x==v.x && y==v.y);	}
-    
 	vector2x operator-()				{	return vector2x(-x, -y);	}
-
 	vector2x operator+(const vector2x& v) 	{	return vector2x(x+v.x, y+v.y);	}
 	vector2x operator-(const vector2x& v)	{	return vector2x(x-v.x, y-v.y);	}
-	
 	void operator+=(const vector2x& v) 	{	x+=v.x; y+=v.y;	}
 	void operator-=(const vector2x& v)	{	x-=v.x; y-=v.y;	}
-
 	vector2x operator*(const int n)			{	return vector2x(MULTX(x, n), MULTX(y, n));	}
 	vector2x operator*(const float n)		{	return vector2x(MULTX(x, FTOX(n)), MULTX(y, FTOX(n)));	}
 	
-	
 	void setx(int xx, int yy)			{	x=xx;	y=yy;	}
-	
 	void zerox()						{	x=y=0;	}
 	
 	__int64_t lengthSquaredx()				{	return MULTX64(x, x)+MULTX64(y, y);			}

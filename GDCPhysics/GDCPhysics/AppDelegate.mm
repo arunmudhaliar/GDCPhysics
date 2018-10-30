@@ -18,7 +18,8 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
     // Insert code here to initialize your application
-    appEntry();
+    GDCPhysics gdcPhysics;
+    gdcPhysics.appEntry();
 }
 
 

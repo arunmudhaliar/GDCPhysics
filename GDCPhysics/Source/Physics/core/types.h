@@ -15,6 +15,7 @@
 #include <math.h>
 
 typedef unsigned char	byte;
+typedef int intx;
 
 //for fixed
 #define Q_FACTOR	12

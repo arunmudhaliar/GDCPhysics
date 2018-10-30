@@ -8,12 +8,23 @@
 //
 //
 
+#include "ball.h"
+#include "colliders/boxCollider.hpp"
+
 class Scene {
 public:
     Scene();
     ~Scene();
     
-    void InitScene();
+    void InitScene(float cx, float cy);
+    void Resize(float cx, float cy);
     void Update();
     void Render();
+    
+protected:
+    vector2f windowSize;
+    Ball ball;
+    BoxCollider ground;
+private:
+    void InternalGLStates();
 };

@@ -7,10 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		55CC155D2187A51F00236749 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC155C2187A51F00236749 /* CoreAudio.framework */; };
-		55CC155E2187A53E00236749 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC15562187A4F400236749 /* AudioToolbox.framework */; };
-		55CC15602187A56600236749 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC155F2187A56600236749 /* ForceFeedback.framework */; };
-		55CC15622187A58B00236749 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC15612187A58B00236749 /* Carbon.framework */; };
 		55CC15662187A92500236749 /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15652187A92500236749 /* ball.cpp */; };
 		55CC15692187A9D100236749 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15682187A9D100236749 /* scene.cpp */; };
 		55CC15712187B33A00236749 /* types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC156B2187B33A00236749 /* types.cpp */; };
@@ -18,9 +14,20 @@
 		55D2A8572187A00700D32E4D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55D2A8562187A00700D32E4D /* AppDelegate.mm */; };
 		55D2A8592187A00800D32E4D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 55D2A8582187A00800D32E4D /* Assets.xcassets */; };
 		55D2A85C2187A00800D32E4D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55D2A85A2187A00800D32E4D /* MainMenu.xib */; };
-		55D2A85F2187A00800D32E4D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55D2A85E2187A00800D32E4D /* main.m */; };
+		55D2A85F2187A00800D32E4D /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55D2A85E2187A00800D32E4D /* main.mm */; };
 		55D2A8782187A1D800D32E4D /* libSDL2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 55D2A8722187A12F00D32E4D /* libSDL2.a */; };
-		55D2A87C2187A27700D32E4D /* appEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D2A87A2187A27700D32E4D /* appEntry.cpp */; };
+		55DF03242188D723004307F7 /* CoreFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC15832188D2E500236749 /* CoreFoundation.framework */; };
+		55DF03252188D736004307F7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC155C2187A51F00236749 /* CoreAudio.framework */; };
+		55DF03272188D74A004307F7 /* CoreAudioKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55DF03262188D74A004307F7 /* CoreAudioKit.framework */; };
+		55DF03282188D76B004307F7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC15562187A4F400236749 /* AudioToolbox.framework */; };
+		55DF03292188D836004307F7 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC15812188D23600236749 /* Cocoa.framework */; };
+		55DF032A2188D878004307F7 /* ForceFeedback.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC155F2187A56600236749 /* ForceFeedback.framework */; };
+		55DF032B2188D8A6004307F7 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC157D2188D1EE00236749 /* CoreVideo.framework */; };
+		55DF032C2188D8F4004307F7 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC15612187A58B00236749 /* Carbon.framework */; };
+		55DF032D2188D907004307F7 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55CC157F2188D22D00236749 /* OpenGL.framework */; };
+		55DF032F2188D932004307F7 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 55DF032E2188D932004307F7 /* IOKit.framework */; };
+		55DF03362188DE47004307F7 /* appEntry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55D2A87A2187A27700D32E4D /* appEntry.cpp */; };
+		55DF033B2188FE0B004307F7 /* boxCollider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55DF03392188FE0B004307F7 /* boxCollider.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,17 +80,28 @@
 		55CC15732187B3BE00236749 /* transformx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transformx.h; sourceTree = "<group>"; };
 		55CC15742187B4C700236749 /* rigidBody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rigidBody.h; sourceTree = "<group>"; };
 		55CC15752187B4C700236749 /* rigidBody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = rigidBody.cpp; sourceTree = "<group>"; };
+		55CC157D2188D1EE00236749 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		55CC157F2188D22D00236749 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		55CC15812188D23600236749 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		55CC15832188D2E500236749 /* CoreFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreFoundation.framework; path = System/Library/Frameworks/CoreFoundation.framework; sourceTree = SDKROOT; };
 		55D2A8522187A00700D32E4D /* GDCPhysics.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GDCPhysics.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		55D2A8552187A00700D32E4D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		55D2A8562187A00700D32E4D /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
 		55D2A8582187A00800D32E4D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		55D2A85B2187A00800D32E4D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		55D2A85D2187A00800D32E4D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		55D2A85E2187A00800D32E4D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		55D2A85E2187A00800D32E4D /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		55D2A8602187A00800D32E4D /* GDCPhysics.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GDCPhysics.entitlements; sourceTree = "<group>"; };
 		55D2A8682187A12E00D32E4D /* SDL.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = SDL.xcodeproj; path = "../SDL-07b7c1005a23/Xcode/SDL/SDL.xcodeproj"; sourceTree = "<group>"; };
 		55D2A87A2187A27700D32E4D /* appEntry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = appEntry.cpp; sourceTree = "<group>"; };
 		55D2A87B2187A27700D32E4D /* appEntry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = appEntry.h; sourceTree = "<group>"; };
+		55DF031B2188D3E9004307F7 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		55DF03222188D562004307F7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		55DF03262188D74A004307F7 /* CoreAudioKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudioKit.framework; path = System/Library/Frameworks/CoreAudioKit.framework; sourceTree = SDKROOT; };
+		55DF032E2188D932004307F7 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		55DF03372188EE06004307F7 /* renderObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderObject.h; sourceTree = "<group>"; };
+		55DF03392188FE0B004307F7 /* boxCollider.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = boxCollider.cpp; sourceTree = "<group>"; };
+		55DF033A2188FE0B004307F7 /* boxCollider.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = boxCollider.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,10 +109,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55CC15622187A58B00236749 /* Carbon.framework in Frameworks */,
-				55CC15602187A56600236749 /* ForceFeedback.framework in Frameworks */,
-				55CC155E2187A53E00236749 /* AudioToolbox.framework in Frameworks */,
-				55CC155D2187A51F00236749 /* CoreAudio.framework in Frameworks */,
+				55DF032F2188D932004307F7 /* IOKit.framework in Frameworks */,
+				55DF032D2188D907004307F7 /* OpenGL.framework in Frameworks */,
+				55DF032C2188D8F4004307F7 /* Carbon.framework in Frameworks */,
+				55DF032B2188D8A6004307F7 /* CoreVideo.framework in Frameworks */,
+				55DF032A2188D878004307F7 /* ForceFeedback.framework in Frameworks */,
+				55DF03292188D836004307F7 /* Cocoa.framework in Frameworks */,
+				55DF03282188D76B004307F7 /* AudioToolbox.framework in Frameworks */,
+				55DF03272188D74A004307F7 /* CoreAudioKit.framework in Frameworks */,
+				55DF03252188D736004307F7 /* CoreAudio.framework in Frameworks */,
+				55DF03242188D723004307F7 /* CoreFoundation.framework in Frameworks */,
 				55D2A8782187A1D800D32E4D /* libSDL2.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -105,11 +129,13 @@
 		55CC15632187A92500236749 /* Physics */ = {
 			isa = PBXGroup;
 			children = (
+				55DF03382188FDE4004307F7 /* colliders */,
 				55CC15752187B4C700236749 /* rigidBody.cpp */,
 				55CC15742187B4C700236749 /* rigidBody.h */,
 				55CC156A2187B33A00236749 /* core */,
 				55CC15682187A9D100236749 /* scene.cpp */,
 				55CC15672187A9D100236749 /* scene.h */,
+				55DF03372188EE06004307F7 /* renderObject.h */,
 				55CC15642187A92500236749 /* ball.h */,
 				55CC15652187A92500236749 /* ball.cpp */,
 			);
@@ -158,7 +184,7 @@
 				55D2A8582187A00800D32E4D /* Assets.xcassets */,
 				55D2A85A2187A00800D32E4D /* MainMenu.xib */,
 				55D2A85D2187A00800D32E4D /* Info.plist */,
-				55D2A85E2187A00800D32E4D /* main.m */,
+				55D2A85E2187A00800D32E4D /* main.mm */,
 				55D2A8602187A00800D32E4D /* GDCPhysics.entitlements */,
 			);
 			path = GDCPhysics;
@@ -178,6 +204,14 @@
 		55D2A8772187A1D800D32E4D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55DF032E2188D932004307F7 /* IOKit.framework */,
+				55DF03262188D74A004307F7 /* CoreAudioKit.framework */,
+				55DF03222188D562004307F7 /* QuartzCore.framework */,
+				55DF031B2188D3E9004307F7 /* AppKit.framework */,
+				55CC15832188D2E500236749 /* CoreFoundation.framework */,
+				55CC15812188D23600236749 /* Cocoa.framework */,
+				55CC157F2188D22D00236749 /* OpenGL.framework */,
+				55CC157D2188D1EE00236749 /* CoreVideo.framework */,
 				55CC15612187A58B00236749 /* Carbon.framework */,
 				55CC155F2187A56600236749 /* ForceFeedback.framework */,
 				55CC155C2187A51F00236749 /* CoreAudio.framework */,
@@ -194,6 +228,15 @@
 				55D2A87B2187A27700D32E4D /* appEntry.h */,
 			);
 			path = Source;
+			sourceTree = "<group>";
+		};
+		55DF03382188FDE4004307F7 /* colliders */ = {
+			isa = PBXGroup;
+			children = (
+				55DF03392188FE0B004307F7 /* boxCollider.cpp */,
+				55DF033A2188FE0B004307F7 /* boxCollider.hpp */,
+			);
+			path = colliders;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -304,11 +347,12 @@
 			files = (
 				55CC15692187A9D100236749 /* scene.cpp in Sources */,
 				55CC15662187A92500236749 /* ball.cpp in Sources */,
-				55D2A85F2187A00800D32E4D /* main.m in Sources */,
-				55D2A87C2187A27700D32E4D /* appEntry.cpp in Sources */,
+				55D2A85F2187A00800D32E4D /* main.mm in Sources */,
 				55D2A8572187A00700D32E4D /* AppDelegate.mm in Sources */,
 				55CC15762187B4C700236749 /* rigidBody.cpp in Sources */,
+				55DF03362188DE47004307F7 /* appEntry.cpp in Sources */,
 				55CC15712187B33A00236749 /* types.cpp in Sources */,
+				55DF033B2188FE0B004307F7 /* boxCollider.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -445,6 +489,11 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 398J48G7VH;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					GL_SILENCE_DEPRECATION,
+				);
 				INFOPLIST_FILE = GDCPhysics/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

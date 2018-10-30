@@ -10,5 +10,9 @@
 
 #include <SDL2/SDL.h>
 
-int appEntry();
-void processEvent(SDL_Window * window, SDL_Event& e, void* userdata);
+class GDCPhysics {
+public:
+    int appEntry();
+    void processSDLEvent(SDL_Window * window, SDL_Event& e, void* userData);
+};
+

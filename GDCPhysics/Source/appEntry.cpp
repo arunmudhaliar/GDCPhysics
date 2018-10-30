@@ -8,7 +8,7 @@ bool g_mAppInitialised = false;
 bool g_mReInitMono = false;
 //int handleAppEvents(void *userdata, SDL_Event *event);
 
-int appEntry() {
+int GDCPhysics::appEntry() {
     // init SDL
     if(SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         printf("ERROR SDL_Init\n");
@@ -53,7 +53,7 @@ int appEntry() {
     }
 
     Scene gameScene;
-    gameScene.InitScene();
+    gameScene.InitScene(window_cx, window_cy);
     
     SDL_GL_MakeCurrent(window, context);
     bool quit=false;
@@ -67,7 +67,7 @@ int appEntry() {
                 quit = true;
             } else {
                 Uint32 event_wndID=e.window.windowID;
-                processEvent(SDL_GetWindowFromID(event_wndID), e, &gameScene);
+                processSDLEvent(SDL_GetWindowFromID(event_wndID), e, &gameScene);
             }
         }
 
@@ -133,7 +133,9 @@ int handleAppEvents(void *userdata, SDL_Event *event)
 }
 */
 
-void processEvent(SDL_Window * window, SDL_Event& e, void* userdata) {
+void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userData) {
+    Scene* scene = static_cast<Scene*>(userData);
+    
     if(e.type==SDL_WINDOWEVENT) {
         SDL_WindowEvent* windowEvent = (SDL_WindowEvent*)&e;
 
@@ -148,7 +150,7 @@ void processEvent(SDL_Window * window, SDL_Event& e, void* userdata) {
                 int window_cy=1;
                 SDL_GetWindowSize(window, &window_cx, &window_cy);
                 SDL_GL_GetDrawableSize(window, &window_cx, &window_cy);
-//                editorApp.size(window_cx, window_cy);
+                scene->Resize(window_cx, window_cy);
             }
                 break;
             

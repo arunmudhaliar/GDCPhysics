@@ -9,9 +9,17 @@
 //
 
 #include "rigidBody.h"
+#include "renderObject.h"
 
-class Ball : public RigidBody {
+class Ball : public RenderObject, public RigidBody {
 public:
     Ball();
     ~Ball();
+    
+    void initBall(float size, const vector2x& pos);
+    
+protected:
+    float vertexBuffer[36*2];
+    float size;
+    virtual void OnRender();
 };
