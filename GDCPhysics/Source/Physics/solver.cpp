@@ -42,12 +42,30 @@ void Solver::UpdateSolver() {
         vector2x contactNormal;
         CheckCollisions(newPos, FTOX((20.0f*20.0f)), collisionHappened, contactNormal);
         if (collisionHappened) {
-            //rb->SetRBVelocity((vel+outVelocity) * FTOX(0.65f));
-            newPos = newPos + contactNormal*FTOX(4.0f);
+            vector2x oldVel = vel+outVelocity;
+            int vel_mag = oldVel.lengthx();
+            printf("vel %f\n", XTOF(vel_mag));
+            oldVel.normalizex();
+
+            intx impulseForce = vel_mag;
+            if (vel_mag > FTOX(5.0f)) {
+                impulseForce = MULTX(vel_mag, FTOX(10.0f));
+            }
+            
+//            if (vel_mag < FTOX(100.0f)) {
+//                if (vel_mag>0) {
+//                    impulseForce = impulseForce/FTOX(vel_mag);
+//                } else {
+//                    impulseForce = 0;
+//                }
+//            }
+            vel_mag = MULTX(vel_mag, FTOX(0.75f));
+            auto newVel = (oldVel + contactNormal) * vel_mag;
+            rb->SetRBVelocity(newVel);
+            newPos = newPos + contactNormal*FTOX(0.1f);
             rb->SetRBPosition(newPos, true);
-            int vel_mag = vel.lengthx();
-            vel_mag = MULTX(vel_mag, FTOX(0.15f));
-            rb->AddForce(contactNormal * (FTOX(4000.0f)+vel_mag));
+
+            rb->AddForce(contactNormal * impulseForce);
         } else {
             rb->SetRBVelocity(vel+outVelocity);
             rb->SetRBPosition(pos+outDisplacement, true);
@@ -58,7 +76,7 @@ void Solver::UpdateSolver() {
 }
 
 void Solver::CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal) {
-    printf("newPos %f, %f\n", XTOF(newPos.x), XTOF(newPos.y));
+//    printf("newPos %f, %f\n", XTOF(newPos.x), XTOF(newPos.y));
     collisionHappened = false;
     int collision_check_cntr=5;
     //bool bCollision=true;
@@ -103,7 +121,7 @@ void Solver::CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHap
                     
                     if (l==0) {
                         float lq = XTOF(closest_length);
-                        printf("closestPt %f, %f, r:%f\n", XTOF(closestPt[0].x), XTOF(closestPt[0].y), sqrt(lq));
+//                        printf("closestPt %f, %f, r:%f\n", XTOF(closestPt[0].x), XTOF(closestPt[0].y), sqrt(lq));
 //                        printf("closest_length %f\n", XTOF(closest_length));
                     }
                     if(closest_length <= radiusSq)
