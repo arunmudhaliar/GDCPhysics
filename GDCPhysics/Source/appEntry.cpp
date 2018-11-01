@@ -275,6 +275,7 @@ void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userDa
 //                //DEBUG_PRINT("Left Mouse Up");
 //                //geTextBox::g_pCurrentlyActiveTextBoxPtr=NULL;
 //                editorApp.MouseLButtonUp(mouse_x, mouse_y, MK_LBUTTON | ((g_mControlKeyPressed) ? MK_CONTROL : 0));
+                scene->MouseBtnUp();
             }
                 break;
             case SDL_BUTTON_MIDDLE:

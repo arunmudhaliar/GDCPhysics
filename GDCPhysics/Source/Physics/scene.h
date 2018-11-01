@@ -22,12 +22,15 @@ public:
     void Update();
     void Render();
     
+    void MouseBtnUp();
+    
 protected:
     vector2f windowSize;
     Ball ball;
     BoxCollider ground;
     BoxCollider leftWall;
     BoxCollider rightWall;
+    BoxCollider topWall;
     Solver physicsSolver;
     
 private:

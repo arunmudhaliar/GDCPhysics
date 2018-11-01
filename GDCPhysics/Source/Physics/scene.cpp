@@ -28,12 +28,14 @@ void Scene::InitScene(float cx, float cy) {
     ground.InitBoxCollider(vector2x(ITOX(1400), ITOX(100)), vector2x(0, 0));
     leftWall.InitBoxCollider(vector2x(ITOX(60), ITOX(1000)), vector2x(0, 0));
     rightWall.InitBoxCollider(vector2x(ITOX(60), ITOX(1000)), vector2x(ITOX(1400), 0));
+    topWall.InitBoxCollider(vector2x(ITOX(1400), ITOX(100)), vector2x(0, ITOX(700)));
     ball.AddForce(vector2x(FTOX(-5000.0f), 0));
     
     physicsSolver.AddRigidBody(&ball);
     physicsSolver.AddBoxCollider(&ground);
     physicsSolver.AddBoxCollider(&leftWall);
     physicsSolver.AddBoxCollider(&rightWall);
+    physicsSolver.AddBoxCollider(&topWall);
 }
 
 void Scene::InternalGLStates() {
@@ -74,8 +76,12 @@ void Scene::Render() {
     ground.draw();
     leftWall.draw();
     rightWall.draw();
+    topWall.draw();
     //
     
     glPopMatrix();
 }
 
+void Scene::MouseBtnUp() {
+    ball.AddForce(vector2x(FTOX(-2000.0f), FTOX(5000.0f)));
+}
