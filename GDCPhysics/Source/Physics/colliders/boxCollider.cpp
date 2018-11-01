@@ -41,7 +41,7 @@ void BoxCollider::InitBoxCollider(const vector2x& size, const vector2x& pos) {
 void BoxCollider::OnRender() {
     glPushMatrix();
     glTranslatef(XTOF(this->position.x), XTOF(this->position.y), 0);
-    glColor3f(1, 1, 0);
+    glColor3f(0, 1, 0);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
     //    glEnableClientState(GL_COLOR_ARRAY);

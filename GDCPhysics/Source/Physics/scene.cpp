@@ -83,5 +83,11 @@ void Scene::Render() {
 }
 
 void Scene::MouseBtnUp() {
-    ball.AddForce(vector2x(FTOX(-2000.0f), FTOX(5000.0f)));
+    auto vel = ball.GetRBVelocity();
+    if (vel.lengthx()<FTOX(20.0f)) {
+        ball.AddForce(vector2x(FTOX(-2000.0f), FTOX(5000.0f)));
+    } else {
+        vel.normalizex();
+        ball.AddForce(vel*ITOX(4000));
+    }
 }
