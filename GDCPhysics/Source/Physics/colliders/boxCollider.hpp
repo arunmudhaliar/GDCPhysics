@@ -19,6 +19,10 @@ public:
     
     void InitBoxCollider(const vector2x& size, const vector2x& pos);
     
+    inline vector2x GetBottomLeft()    { return this->position + vector2x(FTOX(vertexBuffer[0]), FTOX(vertexBuffer[1])); }
+    inline vector2x GetBottomRight()   { return this->position + vector2x(FTOX(vertexBuffer[2]), FTOX(vertexBuffer[3])); }
+    inline vector2x GetTopLeft()       { return this->position + vector2x(FTOX(vertexBuffer[6]), FTOX(vertexBuffer[7])); }
+    inline vector2x GetTopRight()      { return this->position + vector2x(FTOX(vertexBuffer[4]), FTOX(vertexBuffer[5])); }
 protected:
     virtual void OnRender();
     

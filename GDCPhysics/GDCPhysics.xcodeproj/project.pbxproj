@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		556419F5218B5C33004C81D3 /* solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556419F4218B5C33004C81D3 /* solver.cpp */; };
 		55CC15662187A92500236749 /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15652187A92500236749 /* ball.cpp */; };
 		55CC15692187A9D100236749 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15682187A9D100236749 /* scene.cpp */; };
 		55CC15712187B33A00236749 /* types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC156B2187B33A00236749 /* types.cpp */; };
@@ -62,6 +63,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		556419EF218B5C33004C81D3 /* solver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = solver.hpp; sourceTree = "<group>"; };
+		556419F4218B5C33004C81D3 /* solver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = solver.cpp; sourceTree = "<group>"; };
+		556419F6218B6FED004C81D3 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
 		55CC15562187A4F400236749 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		55CC155C2187A51F00236749 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		55CC155F2187A56600236749 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
@@ -129,6 +133,8 @@
 		55CC15632187A92500236749 /* Physics */ = {
 			isa = PBXGroup;
 			children = (
+				556419F4218B5C33004C81D3 /* solver.cpp */,
+				556419EF218B5C33004C81D3 /* solver.hpp */,
 				55DF03382188FDE4004307F7 /* colliders */,
 				55CC15752187B4C700236749 /* rigidBody.cpp */,
 				55CC15742187B4C700236749 /* rigidBody.h */,
@@ -145,6 +151,7 @@
 		55CC156A2187B33A00236749 /* core */ = {
 			isa = PBXGroup;
 			children = (
+				556419F6218B6FED004C81D3 /* util.h */,
 				55CC15722187B3BE00236749 /* matrix4x4x.h */,
 				55CC15732187B3BE00236749 /* transformx.h */,
 				55CC156B2187B33A00236749 /* types.cpp */,
@@ -353,6 +360,7 @@
 				55DF03362188DE47004307F7 /* appEntry.cpp in Sources */,
 				55CC15712187B33A00236749 /* types.cpp in Sources */,
 				55DF033B2188FE0B004307F7 /* boxCollider.cpp in Sources */,
+				556419F5218B5C33004C81D3 /* solver.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

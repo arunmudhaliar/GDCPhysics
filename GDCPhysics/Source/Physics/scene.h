@@ -10,6 +10,7 @@
 
 #include "ball.h"
 #include "colliders/boxCollider.hpp"
+#include "solver.hpp"
 
 class Scene {
 public:
@@ -25,6 +26,10 @@ protected:
     vector2f windowSize;
     Ball ball;
     BoxCollider ground;
+    BoxCollider leftWall;
+    BoxCollider rightWall;
+    Solver physicsSolver;
+    
 private:
     void InternalGLStates();
 };

@@ -59,12 +59,16 @@ public:
 		n=pxMath::SQRT(n);
 		oon = FX_ONE;
 		
-		oon=DIVX(oon, n);
+        float oonf = 1.0f/XTOF(n);
+        x = FTOX(XTOF(x)*oonf);
+        y = FTOX(XTOF(y)*oonf);
+        return FTOX(oonf);
+//        oon=DIVX(oon, n);
+//
+//        x=MULTX(x, oon);
+//        y=MULTX(y, oon);
 		
-		x=MULTX(x, oon);
-		y=MULTX(y, oon);
-		
-		return oon;
+//        return oon;
 	}
 	
 };

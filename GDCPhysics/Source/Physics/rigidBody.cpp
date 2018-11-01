@@ -16,18 +16,34 @@ RigidBody::RigidBody() {
 RigidBody::~RigidBody() {
 }
 
-void RigidBody::UpdateRigidBody() {
+void RigidBody::UpdateRigidBody(intx fixedDT) {
     // F = m * a
     // a = F / m
     
-    vector2x acceleration = this->force * invMass;
-    vector2x velocity = acceleration * FTOX(0.022f);     // fixed dt for 45 FPS
-    this->velocity += velocity;
-    auto displacement = this->velocity * FTOX(0.022f);
-    updatePositionx(displacement.x, displacement.y, 0);
+//    vector2x acceleration = this->force * invMass;
+//    vector2x velocity = acceleration * fixedDT;     // fixed dt for 45 FPS
+//    this->velocity += velocity;
+//    auto displacement = this->velocity * fixedDT;
+//    this->position += displacement;
     
-    ClearForce();
-    AddForce(vector2x(0, -ITOX(10)));
+//    vector2x outDisplacement;
+//    vector2x outVelocity;
+//    SimulateStep(fixedDT, outDisplacement, outVelocity);
+//    
+//    // check if new position is safe or not here.
+//    this->position += outDisplacement;
+//    this->velocity += outVelocity;
+//    //
+//    
+//    SetPositionFromRB(this->position);
+//    ClearForce();
+//    AddForce(vector2x(0, GRAVITY));
+}
+
+void RigidBody::SimulateStep(intx fixedDT, vector2x& displacement, vector2x& velocity) {
+    vector2x acceleration = this->force * invMass;
+    velocity = acceleration * fixedDT;     // fixed dt for 45 FPS
+    displacement = (velocity + this->velocity) * fixedDT;
 }
 
 void RigidBody::SetMass(intx mass) {
@@ -42,6 +58,13 @@ void RigidBody::ClearForce() {
     this->force.zerox();
 }
 
-void RigidBody::SetRBPosition(const vector2x pos) {
-    this->setPositionx(pos);
+void RigidBody::SetRBPosition(const vector2x pos, bool updateTransformImmediate) {
+    this->position = pos;
+    if (updateTransformImmediate) {
+        SetPositionFromRB(this->position);
+    }
+}
+
+void RigidBody::SetRBVelocity(const vector2x& velocity) {
+    this->velocity = velocity;
 }

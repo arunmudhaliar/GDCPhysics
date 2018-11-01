@@ -25,7 +25,7 @@ void Ball::initBall(float size, const vector2x& pos) {
         vertexBuffer[xx*2+0]=cs;
         vertexBuffer[xx*2+1]=sn;
     }
-    SetRBPosition(pos);
+    SetRBPosition(pos, true);
 }
 
 void Ball::OnRender() {
@@ -41,4 +41,12 @@ void Ball::OnRender() {
 //    glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
+}
+
+void Ball::UpdatePositionFromRB(const vector2x& displacement) {
+    updatePositionx(displacement.x, displacement.y, 0);
+}
+
+void Ball::SetPositionFromRB(const vector2x& pos) {
+    setPositionx(pos);
 }

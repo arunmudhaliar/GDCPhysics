@@ -21,12 +21,19 @@ void BoxCollider::InitBoxCollider(const vector2x& size, const vector2x& pos) {
     this->size = size;
     this->position = pos;
     
+    // bottom-left
     vertexBuffer[0] = 0;
     vertexBuffer[1] = 0;
+    
+    // bottom-right
     vertexBuffer[2] = XTOF(size.x);
     vertexBuffer[3] = 0;
+    
+    // top-right
     vertexBuffer[4] = XTOF(size.x);
     vertexBuffer[5] = XTOF(size.y);
+    
+    // top-left
     vertexBuffer[6] = 0;
     vertexBuffer[7] = XTOF(size.y);
 }

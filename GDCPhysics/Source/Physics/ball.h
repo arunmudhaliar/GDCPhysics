@@ -22,4 +22,8 @@ protected:
     float vertexBuffer[36*2];
     float size;
     virtual void OnRender();
+    
+    // rb
+    virtual void UpdatePositionFromRB(const vector2x& displacement);
+    virtual void SetPositionFromRB(const vector2x& pos);
 };

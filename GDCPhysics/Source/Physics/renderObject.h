@@ -8,7 +8,9 @@
 //
 //
 
-class RenderObject {
+#include "core/transformx.h"
+
+class RenderObject : public transformx {
 public:
     RenderObject() {}
     virtual ~RenderObject() {}
