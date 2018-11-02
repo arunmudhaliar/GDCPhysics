@@ -40,10 +40,11 @@ class Room {
     // console.log("first "+this._first.remoteAddress);
     // console.log("second "+this._second.remoteAddress);
 
-    if (this._first !=null && this._first.remoteAddress == remoteAddress) {
+    
+    if (this._first !=null && getIP(this._first) == remoteAddress) {
       return 1;
     }
-    if (this._second !=null && this._second.remoteAddress == remoteAddress) {
+    if (this._second !=null && getIP(this._second) == remoteAddress) {
       return 2;
     }
     return 0;
@@ -58,11 +59,15 @@ class Room {
   stopGame(connection) {
     console.log("stopGame for room "+this.name);
     if (connection != this._first) {
-      this._first.send("stopgame");
-      this._first.close();
+      if (this._first) {
+        this._first.send("stopgame");
+        this._first.close();
+      }
     } else {
-      this._second.send("stopgame");
-      this._second.close();
+      if (this._second) {
+        this._second.send("stopgame");
+        this._second.close();
+      }
     }
   }
   // sayHello() {
@@ -93,8 +98,7 @@ wsServer = new WebSocketServer({
 // WebSocket server
 wsServer.on('request', function(request) {
   var connection = request.accept(null, request.origin);
-  console.log("new connection "+connection.remoteAddress);
-
+  console.log("new connection "+getIP(connection));
   // check for any unfilled rooms
   var r = waitingRoom();
   if (r) {
@@ -113,17 +117,24 @@ wsServer.on('request', function(request) {
     if (message.type === 'utf8') {
       // process WebSocket message
       console.log(message.utf8Data);
-      console.log("connection msg "+connection.remoteAddress);
+      console.log("connection msg "+getIP(connection));
       messagePass(connection, message.utf8Data);
     }
   });
 
   connection.on('close', function(socket) {
     // close user connection
-    console.log("connection closed "+connection.remoteAddress);
+    console.log("connection closed "+getIP(connection));
     stopGame(connection);
   });
 });
+
+function getIP(connection) {
+  if (connection) {
+    return connection.remoteAddress + ":" + connection.socket.remotePort;
+  }
+  return "";
+}
 
 function waitingRoom() {
   for (i=0;i<rooms.length;i++) {
@@ -138,7 +149,7 @@ function stopGame(connection) {
   var index = -1;
   for (i=0;i<rooms.length;i++) {
     console.log("searching room "+rooms[i].name);
-    if (rooms[i].isMemberOfThisRoom(connection.remoteAddress) > 0) {
+    if (rooms[i].isMemberOfThisRoom(getIP(connection)) > 0) {
       rooms[i].stopGame(connection);
       index = i;
       break;
@@ -154,7 +165,7 @@ function stopGame(connection) {
 function messagePass(connection, msg) {
   for (i=0;i<rooms.length;i++) {
     console.log("searching room "+rooms[i].name);
-    var playerID = rooms[i].isMemberOfThisRoom(connection.remoteAddress)
+    var playerID = rooms[i].isMemberOfThisRoom(getIP(connection))
     if (playerID > 0) {
       if (playerID == 1) {
         if (rooms[i].second) {
