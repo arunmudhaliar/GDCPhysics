@@ -55,6 +55,7 @@ NetworkManager::NetworkManager() {
 }
 
 NetworkManager::~NetworkManager() {
+    c.stop();
 }
 
 void NetworkManager::SendMessage(const std::string& msg) {
