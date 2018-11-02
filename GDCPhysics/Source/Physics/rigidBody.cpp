@@ -11,6 +11,7 @@
 
 RigidBody::RigidBody() {
     SetMass(FX_ONE);
+    SetRadius(ITOX(20));
 }
 
 RigidBody::~RigidBody() {
@@ -49,6 +50,11 @@ void RigidBody::SimulateStep(intx fixedDT, vector2x& displacement, vector2x& vel
 void RigidBody::SetMass(intx mass) {
     this->mass = mass;
     this->invMass = DIVX(FX_ONE, mass);
+}
+
+void RigidBody::SetRadius(intx radius) {
+    this->radius = radius;
+    this->radiusSq = MULTX(radius, radius);
 }
 
 void RigidBody::AddForce(vector2x force) {

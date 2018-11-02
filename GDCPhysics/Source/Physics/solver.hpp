@@ -19,6 +19,7 @@ public:
     Solver();
     ~Solver();
     
+    void InitSolver();
     void AddRigidBody(RigidBody* rb);
     void AddBoxCollider(BoxCollider* collider);
     void UpdateSolver();
@@ -27,6 +28,12 @@ private:
     std::vector<RigidBody*> rigidBodies;
     std::vector<BoxCollider*> boxColliders;
     
+    void UpdatePhysics(intx t, intx fixedDT);
     void CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal);
+    
+    // timer
+    unsigned long elapsedTime;
+    unsigned long currentTime;
+    unsigned long accumulator;
 };
 #endif /* solver_hpp */

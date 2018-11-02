@@ -16,7 +16,7 @@ public:
     Ball();
     ~Ball();
     
-    void initBall(float size, const vector2x& pos);
+    void initBall(float size, float mass, const vector2x& pos);
     
 protected:
     float vertexBuffer[36*2];

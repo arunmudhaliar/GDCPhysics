@@ -17,8 +17,10 @@ Ball::Ball() {
 Ball::~Ball() {
 }
 
-void Ball::initBall(float size, const vector2x& pos) {
+void Ball::initBall(float size, float mass, const vector2x& pos) {
     this->size = size;
+    SetRadius(FTOX(size));
+    SetMass(FTOX(mass));
     for(int xx=36-1; xx>=0; xx--) {
         float cs=size*cos(DEG2RAD((float)xx*10));
         float sn=size*sin(DEG2RAD((float)xx*10));

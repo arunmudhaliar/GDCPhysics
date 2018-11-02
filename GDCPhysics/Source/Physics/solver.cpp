@@ -9,16 +9,27 @@
 #include "solver.hpp"
 #include "core/util.h"
 #include "core/pxMath.h"
+#include "core/Timer.h"
 
-#define FIXED_DT    FTOX(0.022f)
-#define GRAVITY -ITOX(10)
+#define FIXED_DT_READABLE    16             // 45 fps
+#define FIXED_DT_THRESHOLD_READABLE    40   // 25 fps
+#define FIXED_DT    FTOX(0.016f)            // 45 fps
+#define GRAVITY -ITOX(100)
 
 Solver::Solver() {
-    
+    this->elapsedTime = 0;
+    this->currentTime = 0;
+    this->accumulator = 0;
 }
 
 Solver::~Solver() {
     
+}
+
+void Solver::InitSolver() {
+    this->elapsedTime = 0;
+    this->currentTime = Timer::getCurrentTimeInMilliSec();
+    this->accumulator = 0;
 }
 
 void Solver::AddRigidBody(RigidBody* rb) {
@@ -30,48 +41,60 @@ void Solver::AddBoxCollider(BoxCollider* collider) {
 }
 
 void Solver::UpdateSolver() {
+    unsigned long newTime = Timer::getCurrentTimeInMilliSec();
+    unsigned long frameTime = newTime - this->currentTime;
+    if ( frameTime > FIXED_DT_THRESHOLD_READABLE ) {
+        frameTime = FIXED_DT_THRESHOLD_READABLE;
+    }
+    this->currentTime = newTime;
+    this->accumulator += frameTime;
+    
+//    printf("frameTime %d, accumulator %d\n", frameTime, accumulator);
+    while ( this->accumulator >= FIXED_DT_READABLE ) {
+        UpdatePhysics(FTOX(this->elapsedTime/1000.0f), FIXED_DT);
+        this->elapsedTime += FIXED_DT_READABLE;
+        this->accumulator -= FIXED_DT_READABLE;
+    }
+    
+//    UpdatePhysics(FTOX(this->elapsedTime/1000.0f), FIXED_DT);
+}
+
+void Solver::UpdatePhysics(intx t, intx fixedDT) {
     vector2x outDisplacement;
     vector2x outVelocity;
     for (auto rb : this->rigidBodies) {
-        rb->SimulateStep(FIXED_DT, outDisplacement, outVelocity);
+        rb->SimulateStep(fixedDT, outDisplacement, outVelocity);
         rb->ClearForce();
         auto vel = rb->GetRBVelocity();
         auto pos = rb->GetRBPosition();
         auto newPos = pos+outDisplacement;
         bool collisionHappened = false;
         vector2x contactNormal;
-        CheckCollisions(newPos, FTOX((20.0f*20.0f)), collisionHappened, contactNormal);
+        CheckCollisions(newPos, rb->GetRadiusSq(), collisionHappened, contactNormal);
         if (collisionHappened) {
             vector2x oldVel = vel+outVelocity;
             int vel_mag = oldVel.lengthx();
-            printf("vel %f\n", XTOF(vel_mag));
+//            printf("vel %f\n", XTOF(vel_mag));
             oldVel.normalizex();
-
+            
             intx impulseForce = vel_mag;
             if (vel_mag > FTOX(5.0f)) {
-                impulseForce = MULTX(vel_mag, FTOX(10.0f));
+                impulseForce = MULTX(vel_mag, FTOX(25.0f));
             }
-            
-//            if (vel_mag < FTOX(100.0f)) {
-//                if (vel_mag>0) {
-//                    impulseForce = impulseForce/FTOX(vel_mag);
-//                } else {
-//                    impulseForce = 0;
-//                }
-//            }
-            vel_mag = MULTX(vel_mag, FTOX(0.75f));
+            vel_mag = MULTX(vel_mag, FTOX(0.8f));
             auto newVel = (oldVel + contactNormal) * vel_mag;
             rb->SetRBVelocity(newVel);
             newPos = newPos + contactNormal*FTOX(0.1f);
             rb->SetRBPosition(newPos, true);
-
+            
             rb->AddForce(contactNormal * impulseForce);
         } else {
             rb->SetRBVelocity(vel+outVelocity);
             rb->SetRBPosition(pos+outDisplacement, true);
         }
         
-        rb->AddForce(vector2x(0, GRAVITY));
+        intx gravity = MULTX(GRAVITY, rb->GetRBMass());
+        rb->AddForce(vector2x(0, gravity));
     }
 }
 

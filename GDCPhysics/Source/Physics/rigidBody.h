@@ -18,6 +18,7 @@ public:
     
     void UpdateRigidBody(intx fixedDT);
     void SetMass(intx mass);
+    void SetRadius(intx radius);
     void AddForce(vector2x force);
     void ClearForce();
     
@@ -27,6 +28,9 @@ public:
     void SimulateStep(intx fixedDT, vector2x& displacement, vector2x& velocity);
     inline vector2x& GetRBPosition()   { return position; }
     inline vector2x& GetRBVelocity()   { return velocity; }
+    inline intx GetRBMass() { return mass; }
+    inline intx GetRadius() { return radius; }
+    inline intx GetRadiusSq() { return radiusSq; }
     
 protected:
     vector2x force;
@@ -34,6 +38,8 @@ protected:
     intx mass;
     intx invMass;
     vector2x position;
+    intx radius;
+    intx radiusSq;
     
     virtual void UpdatePositionFromRB(const vector2x& displacement) = 0;
     virtual void SetPositionFromRB(const vector2x& pos) = 0;
