@@ -9,6 +9,8 @@
 #define UTIL_H
 
 #include "vector2.h"
+#include <string>
+#include <vector>
 
 class util
 {
@@ -52,6 +54,45 @@ public:
         V = V * (int)t;
         
         return (a+V);	
+    }
+    
+    static void splitString(const std::string& str, std::vector<std::string>& cont, char delim = '|') {
+        std::size_t current, previous = 0;
+        current = str.find(delim);
+        while (current != std::string::npos) {
+            cont.push_back(str.substr(previous, current - previous));
+            previous = current + 1;
+            current = str.find(delim, previous);
+        }
+        cont.push_back(str.substr(previous, current - previous));
+    }
+    
+    static std::string stringFormat(const char *fmt, ...) {
+        std::vector<char> str(150, '\0');
+        va_list ap;
+        while (1) {
+            va_start(ap, fmt);
+            auto n = vsnprintf(str.data(), str.size(), fmt, ap);
+            va_end(ap);
+            if ((n > -1) && (size_t(n) < str.size())) {
+                return str.data();
+            }
+            if (n > -1)
+                str.resize(n + 1);
+            else
+                str.resize(str.size() * 2);
+        }
+        return str.data();
+    }
+    
+    static std::string trim(const std::string& str) {
+        size_t first = str.find_first_not_of(' ');
+        if (std::string::npos == first)
+        {
+            return str;
+        }
+        size_t last = str.find_last_not_of(' ');
+        return str.substr(first, (last - first + 1));
     }
     
 //    static bool twoLineSegmentIntersection(vector2f& a, vector2f& b, vector2f& c, vector2f& d, vector2f& i1, vector2f& i2)

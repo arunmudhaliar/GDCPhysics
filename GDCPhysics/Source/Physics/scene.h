@@ -54,6 +54,8 @@ protected:
     void OnGameStart();
     void OnGameReset();
     
+    void SendBallState();
+    
 private:
     void InternalGLStates();
     GAME_STATE gameState;

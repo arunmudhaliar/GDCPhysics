@@ -10,6 +10,7 @@
 #include "scene.h"
 #include <OpenGL/gl.h>
 #include "core/Timer.h"
+#include "core/util.h"
 
 Scene::Scene() {
     this->gameState = GAME_STATE_MAX;
@@ -78,6 +79,9 @@ void Scene::MouseBtnUp() {
         return;
     }
     
+    SendBallState();
+    NetworkManager::GetInstance().SendMessage("input");
+    
     auto vel = ball.GetRBVelocity();
     if (vel.lengthx()<FTOX(20.0f)) {
         ball.AddForce(vector2x(FTOX(-2000.0f), FTOX(5000.0f)));
@@ -87,6 +91,12 @@ void Scene::MouseBtnUp() {
     }
 }
 
+void Scene::SendBallState() {
+    auto pos = this->ball.GetRBPosition();
+    auto velocity = this->ball.GetRBVelocity();
+    auto msg = util::stringFormat("ball|%d,%d,%d,%d", pos.x, pos.y, velocity.x, velocity.y);
+    NetworkManager::GetInstance().SendMessage(msg);
+}
 
 void Scene::OnNetworkMessage(const std::string& msg) {
     printf("Msg from other player %s\n", msg.c_str());
@@ -94,6 +104,32 @@ void Scene::OnNetworkMessage(const std::string& msg) {
     if (msg == "first" || msg == "second") {
         if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
             SetGameState(GAME_START);
+        }
+    } else if (msg == "input") {
+        auto vel = ball.GetRBVelocity();
+        if (vel.lengthx()<FTOX(20.0f)) {
+            ball.AddForce(vector2x(FTOX(-2000.0f), FTOX(5000.0f)));
+        } else {
+            vel.normalizex();
+            ball.AddForce(vel*ITOX(20000));
+        }
+    } else {
+        std::vector<std::string> lines;
+        util::splitString(msg, lines);
+        if (lines.size()) {
+            if (lines[0] == "ball" && lines.size()==2) {
+                std::vector<std::string> args;
+                util::splitString(lines[1], args, ',');
+                if (args.size()==4) {
+                    intx px = atoi(args[0].c_str());
+                    intx py = atoi(args[1].c_str());
+                    intx vx = atoi(args[2].c_str());
+                    intx vy = atoi(args[3].c_str());
+                    
+                    this->ball.SetRBVelocity(vector2x(vx, vy));
+                    this->ball.SetRBPosition(vector2x(px, py));
+                }
+            }
         }
     }
 }
