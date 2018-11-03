@@ -160,6 +160,13 @@ void Scene::MouseBtnUp() {
 void Scene::MoveStrickerUP(bool keyDown) {
     if (this->inputMoveUp != keyDown) {
         std::string msg = (keyDown) ? "stricker_up|1" : "stricker_up|0";
+        if (this->playerType == PLAYER_FIRST) {
+            auto pos = this->player1.GetPosition();
+            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+        } else if (this->playerType == PLAYER_SECOND) {
+            auto pos = this->player1.GetPosition();
+            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+        }
         NetworkManager::GetInstance().SendMessage(msg);
     }
     this->inputMoveUp = keyDown;
@@ -168,6 +175,13 @@ void Scene::MoveStrickerUP(bool keyDown) {
 void Scene::MoveStrickerDown(bool keyDown) {
     if (this->inputMoveDown != keyDown) {
         std::string msg = (keyDown) ? "stricker_down|1" : "stricker_down|0";
+        if (this->playerType == PLAYER_FIRST) {
+            auto pos = this->player1.GetPosition();
+            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+        } else if (this->playerType == PLAYER_SECOND) {
+            auto pos = this->player1.GetPosition();
+            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+        }
         NetworkManager::GetInstance().SendMessage(msg);
     }
     this->inputMoveDown = keyDown;
@@ -236,12 +250,34 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                     intx fy = atoi(args[1].c_str());
                     this->ball.AddForce(vector2x(fx, fy));
                 }
-            } else if (lines[0] == "stricker_up" && lines.size()==2) {
+            } else if (lines[0] == "stricker_up" && lines.size()==3) {
                 int val = atoi(lines[1].c_str());
                 this->remoteInputMoveUp = (val==1);
-            } else if (lines[0] == "stricker_down" && lines.size()==2) {
+                std::vector<std::string> args;
+                util::splitString(lines[2], args, ',');
+                if (args.size()==2) {
+                    intx px = atoi(args[0].c_str());
+                    intx py = atoi(args[1].c_str());
+                    if (this->playerType == PLAYER_FIRST) {
+                        this->player2.SetPosition(vector2x(px, py));
+                    } else if (this->playerType == PLAYER_SECOND) {
+                        this->player1.SetPosition(vector2x(px, py));
+                    }
+                }
+            } else if (lines[0] == "stricker_down" && lines.size()==3) {
                 int val = atoi(lines[1].c_str());
                 this->remoteInputMoveDown = (val==1);
+                std::vector<std::string> args;
+                util::splitString(lines[2], args, ',');
+                if (args.size()==2) {
+                    intx px = atoi(args[0].c_str());
+                    intx py = atoi(args[1].c_str());
+                    if (this->playerType == PLAYER_FIRST) {
+                        this->player2.SetPosition(vector2x(px, py));
+                    } else if (this->playerType == PLAYER_SECOND) {
+                        this->player1.SetPosition(vector2x(px, py));
+                    }
+                }
             }
         }
     }
