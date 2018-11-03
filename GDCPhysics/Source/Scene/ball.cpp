@@ -56,7 +56,6 @@ void Ball::SetPositionFromRB(const vector2x& pos) {
 }
 
 void Ball::OnCollision() {
-    SendBallState();
 }
 
 void Ball::SendBallState() {
