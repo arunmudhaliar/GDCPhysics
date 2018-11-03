@@ -12,6 +12,8 @@
 #include "colliders/boxCollider.hpp"
 #include "solver.hpp"
 #include "../Connection/NetworkManager.hpp"
+#include "../GUI/geFontManager.h"
+#include <SDL2/SDL.h>
 
 class Scene : protected NetworkManagerDelegate {
 public:
@@ -31,7 +33,7 @@ public:
     Scene();
     ~Scene();
     
-    void InitScene(float cx, float cy);
+    void InitScene(SDL_Window* window, float cx, float cy);
     void Resize(float cx, float cy);
     void Update();
     void Render();
@@ -63,9 +65,14 @@ protected:
     void SendBallState();
     
     void ApplyBoost();
+    
+    void DrawStats();
+    
 private:
     void InternalGLStates();
     GAME_STATE gameState;
     PLAYER_TYPE playerType;
     unsigned long pingTimeFromOtherPlayer;
+    SDL_Window* window;
+    std::string statusMsg;
 };

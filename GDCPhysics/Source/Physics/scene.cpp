@@ -16,14 +16,19 @@ Scene::Scene() {
     this->gameState = GAME_STATE_MAX;
     this->playerType = PLAYER_TYPE_MAX;
     this->pingTimeFromOtherPlayer = 0;
+    this->window = nullptr;
+    statusMsg = "Connecting...";
 }
 
 Scene::~Scene() {
 }
 
-void Scene::InitScene(float cx, float cy) {
+void Scene::InitScene(SDL_Window* window, float cx, float cy) {
+    this->window = window;
     cx*=0.5f; cy*=0.5f;     // for retina display.
     windowSize.set(cx, cy);
+    
+    geFontManager::InitializeFonts();
     
     SetGameState(GAME_INIT);
     Resize(cx*2.0f, cy*2.0f);
@@ -74,7 +79,29 @@ void Scene::Render() {
     topWall.draw();
     //
     
+    DrawStats();
+    
     glPopMatrix();
+}
+
+void Scene::DrawStats() {
+    if (geFontManager::g_pFontArial10_84Ptr == nullptr) {
+        return;
+    }
+    // Stats
+    glPushMatrix();
+    glScalef(1, -1, 1);
+    int iterator = 0;
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("FPS %3.2f", Timer::getFPS()).c_str(), 45, -(60+(iterator++)*20), 200);
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PING %d ms", this->pingTimeFromOtherPlayer).c_str(), 45, -(60+(iterator++)*20), 200);
+    if (this->gameState == GAME_START) {
+        geFontManager::g_pFontArial10_84Ptr->drawString((this->playerType == PLAYER_FIRST) ? "PLAYER 1" : "PLAYER 2", 45, -(60+(iterator++)*20), 200);
+    }
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("ELAPSED %lu ms", this->physicsSolver.GetElapsedTime()).c_str(), 45, -(60+(iterator++)*20), 200);
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("STATUS : %s", this->statusMsg.c_str()).c_str(), 45, -(60+(iterator++)*20), 200);
+
+    glPopMatrix();
+    //
 }
 
 void Scene::MouseBtnUp() {
@@ -151,13 +178,17 @@ void Scene::OnNetworkMessage(const std::string& msg) {
 }
 
 void Scene::OnNetworkFail() {
+    statusMsg = "Network Error...";
 }
 
 void Scene::OnNetworkOpen() {
     NetworkManager::GetInstance().SendMessage("Hello from Mac");
+    statusMsg = "CONNECTED";
 }
 
 void Scene::OnNetworkClose() {
+    statusMsg = "DISCONECTED";
+    SetGameState(GAME_RESET);
 }
 
 
@@ -215,7 +246,7 @@ void Scene::OnGameInit() {
 }
 
 void Scene::OnGameStart() {
-    
+    statusMsg = "GAMEPLAY";
 }
 
 void Scene::OnGameReset() {

@@ -24,6 +24,8 @@ public:
     void AddBoxCollider(BoxCollider* collider);
     void UpdateSolver();
     
+    unsigned long GetElapsedTime()  { return elapsedTime; }
+    
 private:
     std::vector<RigidBody*> rigidBodies;
     std::vector<BoxCollider*> boxColliders;

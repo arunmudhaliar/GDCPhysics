@@ -24,7 +24,7 @@ int GDCPhysics::appEntry() {
                                            SDL_WINDOWPOS_CENTERED,     // y position, centered
                                            800,                        // width, in pixels
                                            600,                        // height, in pixels
-                                           SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN  /*| SDL_WINDOW_RESIZABLE  |  SDL_WINDOW_ALLOW_HIGHDPI */   // flags
+                                           SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN  | SDL_WINDOW_RESIZABLE  /*|  SDL_WINDOW_ALLOW_HIGHDPI */   // flags
                                            );
 	
     // SDL_MaximizeWindow(window);
@@ -53,7 +53,7 @@ int GDCPhysics::appEntry() {
     }
 
     Scene gameScene;
-    gameScene.InitScene(window_cx, window_cy);
+    gameScene.InitScene(window, window_cx, window_cy);
     
     SDL_GL_MakeCurrent(window, context);
     bool quit=false;

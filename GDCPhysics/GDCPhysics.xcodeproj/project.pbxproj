@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5545E6C9218DC809003641E1 /* geFontManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6C8218DC809003641E1 /* geFontManager.cpp */; };
+		5545E6CC218DC85A003641E1 /* gxFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6CA218DC85A003641E1 /* gxFile.cpp */; };
+		5545E6D6218DDB03003641E1 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 5545E6D5218DDB03003641E1 /* res */; };
+		5545E6DD218DE31B003641E1 /* OSUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6DC218DE31B003641E1 /* OSUtils.mm */; };
 		556419F5218B5C33004C81D3 /* solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556419F4218B5C33004C81D3 /* solver.cpp */; };
 		55CC15662187A92500236749 /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15652187A92500236749 /* ball.cpp */; };
 		55CC15692187A9D100236749 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15682187A9D100236749 /* scene.cpp */; };
@@ -66,6 +70,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5545E6C7218DC809003641E1 /* geFontManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = geFontManager.h; sourceTree = "<group>"; };
+		5545E6C8218DC809003641E1 /* geFontManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = geFontManager.cpp; sourceTree = "<group>"; };
+		5545E6CA218DC85A003641E1 /* gxFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gxFile.cpp; sourceTree = "<group>"; };
+		5545E6CB218DC85A003641E1 /* gxFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gxFile.h; sourceTree = "<group>"; };
+		5545E6D5218DDB03003641E1 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
+		5545E6DC218DE31B003641E1 /* OSUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OSUtils.mm; sourceTree = "<group>"; };
+		5545E6DE218DE364003641E1 /* OSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSUtils.h; sourceTree = "<group>"; };
 		556419EF218B5C33004C81D3 /* solver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = solver.hpp; sourceTree = "<group>"; };
 		556419F4218B5C33004C81D3 /* solver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = solver.cpp; sourceTree = "<group>"; };
 		556419F6218B6FED004C81D3 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
@@ -231,6 +242,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5545E6C6218DC809003641E1 /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+				5545E6CA218DC85A003641E1 /* gxFile.cpp */,
+				5545E6CB218DC85A003641E1 /* gxFile.h */,
+				5545E6C7218DC809003641E1 /* geFontManager.h */,
+				5545E6C8218DC809003641E1 /* geFontManager.cpp */,
+				5545E6DE218DE364003641E1 /* OSUtils.h */,
+				5545E6DC218DE31B003641E1 /* OSUtils.mm */,
+			);
+			path = GUI;
+			sourceTree = "<group>";
+		};
 		55CC15632187A92500236749 /* Physics */ = {
 			isa = PBXGroup;
 			children = (
@@ -270,6 +294,7 @@
 		55D2A8492187A00700D32E4D = {
 			isa = PBXGroup;
 			children = (
+				5545E6D5218DDB03003641E1 /* res */,
 				55D2A8792187A27700D32E4D /* Source */,
 				55D2A8682187A12E00D32E4D /* SDL.xcodeproj */,
 				55D2A8542187A00700D32E4D /* GDCPhysics */,
@@ -333,6 +358,7 @@
 		55D2A8792187A27700D32E4D /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				5545E6C6218DC809003641E1 /* GUI */,
 				55FEBD6B218C8D53002349CA /* Connection */,
 				55FEBCF5218C8CAC002349CA /* websocketpp */,
 				55FEBCEC218C4DBD002349CA /* Misc */,
@@ -742,6 +768,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55FEBD6A218C8CAC002349CA /* CMakeLists.txt in Resources */,
+				5545E6D6218DDB03003641E1 /* res in Resources */,
 				55D2A8592187A00800D32E4D /* Assets.xcassets in Resources */,
 				55D2A85C2187A00800D32E4D /* MainMenu.xib in Resources */,
 			);
@@ -755,13 +782,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				55CC15692187A9D100236749 /* scene.cpp in Sources */,
+				5545E6DD218DE31B003641E1 /* OSUtils.mm in Sources */,
 				55CC15662187A92500236749 /* ball.cpp in Sources */,
 				55FEBD6E218C8D70002349CA /* NetworkManager.cpp in Sources */,
 				55D2A85F2187A00800D32E4D /* main.mm in Sources */,
 				55D2A8572187A00700D32E4D /* AppDelegate.mm in Sources */,
 				55FEBCF4218C71BB002349CA /* Timer.cpp in Sources */,
+				5545E6CC218DC85A003641E1 /* gxFile.cpp in Sources */,
 				55CC15762187B4C700236749 /* rigidBody.cpp in Sources */,
 				55DF03362188DE47004307F7 /* appEntry.cpp in Sources */,
+				5545E6C9218DC809003641E1 /* geFontManager.cpp in Sources */,
 				55CC15712187B33A00236749 /* types.cpp in Sources */,
 				55DF033B2188FE0B004307F7 /* boxCollider.cpp in Sources */,
 				556419F5218B5C33004C81D3 /* solver.cpp in Sources */,
