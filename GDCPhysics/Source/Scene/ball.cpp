@@ -63,10 +63,12 @@ void Ball::OnCollision(std::vector<BoxCollider*>& colliders) {
             SendBallState();
 
             // send striker force
-            auto force = this->force;
             auto msg = util::stringFormat("stricker|%d,%d", this->force.x, this->force.y);
             NetworkManager::GetInstance().SendMessage(msg);
             //
+            
+            // there will be duplicates so break.
+            break;
         }
     }
 }
