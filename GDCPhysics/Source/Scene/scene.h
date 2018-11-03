@@ -9,6 +9,7 @@
 //
 
 #include "ball.h"
+#include "stricker.hpp"
 #include "../Physics/colliders/boxCollider.hpp"
 #include "../Physics/solver.hpp"
 #include "../Connection/NetworkManager.hpp"
@@ -40,6 +41,9 @@ public:
     
     void MouseBtnUp();
     
+    void MoveStrickerUP(bool keyDown);
+    void MoveStrickerDown(bool keyDown);
+    
 protected:
     vector2f windowSize;
     Ball ball;
@@ -49,6 +53,9 @@ protected:
     BoxCollider rightWall;
     BoxCollider topWall;
     Solver physicsSolver;
+    
+    Stricker player1;
+    Stricker player2;
     
     // NetworkManagerDelegate
     void OnNetworkMessage(const std::string& msg) override;
@@ -73,4 +80,7 @@ private:
     unsigned long pingTimeFromOtherPlayer;
     SDL_Window* window;
     std::string statusMsg;
+    
+    bool inputMoveDown;
+    bool inputMoveUp;
 };

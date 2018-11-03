@@ -27,5 +27,5 @@ protected:
     // rb
     virtual void UpdatePositionFromRB(const vector2x& displacement);
     virtual void SetPositionFromRB(const vector2x& pos);
-    virtual void OnCollision();
+    virtual void OnCollision(std::vector<BoxCollider*>& colliders);
 };

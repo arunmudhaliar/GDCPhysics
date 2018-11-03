@@ -22,6 +22,8 @@ public:
     void InitSolver();
     void AddRigidBody(RigidBody* rb);
     void AddBoxCollider(BoxCollider* collider);
+    void RemoveRigidBody(RigidBody* rb);
+    void RemoveBoxCollider(BoxCollider* collider);
     void UpdateSolver();
     
     unsigned long GetElapsedTime()  { return elapsedTime; }
@@ -31,7 +33,7 @@ private:
     std::vector<BoxCollider*> boxColliders;
     
     void UpdatePhysics(intx t, intx fixedDT);
-    void CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal);
+    void CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal, std::vector<BoxCollider*>& colliders);
     
     // timer
     unsigned long elapsedTime;

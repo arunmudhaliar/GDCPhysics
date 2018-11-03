@@ -203,15 +203,12 @@ void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userDa
         SDL_KeyboardEvent* keyBoardEvent = (SDL_KeyboardEvent*)&e;
         //const Uint8 *keystate = SDL_GetKeyboardState(NULL);
 		g_mControlKeyPressed = (keyBoardEvent->keysym.scancode == SDL_SCANCODE_LCTRL) || (keyBoardEvent->keysym.scancode == SDL_SCANCODE_RCTRL);
-//        if(geTextBox::g_pCurrentlyActiveTextBoxPtr)
-//        {
-//            bool bCaptured=geTextBox::g_pCurrentlyActiveTextBoxPtr->KeyDown(keyBoardEvent->keysym.scancode, keyBoardEvent->keysym.mod);
-//            UNUSED(bCaptured);
-//        }
-//        else
-//        {
-//            editorApp.KeyDown(keyBoardEvent->keysym.scancode, 0/*lParam*/);
-//        }
+        if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_UP) {
+            scene->MoveStrickerUP(true);
+        }
+        if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_DOWN) {
+            scene->MoveStrickerDown(true);
+        }
     }
     else if(e.type==SDL_KEYUP)
     {
@@ -222,16 +219,13 @@ void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userDa
             if((keyBoardEvent->keysym.scancode == SDL_SCANCODE_LCTRL) || (keyBoardEvent->keysym.scancode == SDL_SCANCODE_RCTRL))
                 g_mControlKeyPressed = false;
         }
-
-//        if(geTextBox::g_pCurrentlyActiveTextBoxPtr)
-//        {
-//            bool bCaptured=geTextBox::g_pCurrentlyActiveTextBoxPtr->KeyUp(keyBoardEvent->keysym.scancode, keyBoardEvent->keysym.mod);
-//            UNUSED(bCaptured);
-//        }
-//        else
-//        {
-//            editorApp.KeyUp(keyBoardEvent->keysym.scancode, 0/*lParam*/);
-//        }
+        
+        if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_UP) {
+            scene->MoveStrickerUP(false);
+        }
+        if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_DOWN) {
+            scene->MoveStrickerDown(false);
+        }
     }
     else if(e.type==SDL_MOUSEBUTTONDOWN)
     {

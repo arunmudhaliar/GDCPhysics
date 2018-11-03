@@ -33,11 +33,23 @@ void Solver::InitSolver() {
 }
 
 void Solver::AddRigidBody(RigidBody* rb) {
-    this->rigidBodies.push_back(rb);
+    if (std::find(this->rigidBodies.begin(), this->rigidBodies.end(), rb) == this->rigidBodies.end()) {
+        this->rigidBodies.push_back(rb);
+    }
 }
 
 void Solver::AddBoxCollider(BoxCollider* collider) {
-    this->boxColliders.push_back(collider);
+    if (std::find(this->boxColliders.begin(), this->boxColliders.end(), collider) == this->boxColliders.end()) {
+        this->boxColliders.push_back(collider);
+    }
+}
+
+void Solver::RemoveRigidBody(RigidBody* rb) {
+    this->rigidBodies.erase(std::remove(this->rigidBodies.begin(), this->rigidBodies.end(), rb), this->rigidBodies.end());
+}
+
+void Solver::RemoveBoxCollider(BoxCollider* collider) {
+    this->boxColliders.erase(std::remove(this->boxColliders.begin(), this->boxColliders.end(), collider), this->boxColliders.end());
 }
 
 void Solver::UpdateSolver() {
@@ -62,6 +74,7 @@ void Solver::UpdateSolver() {
 void Solver::UpdatePhysics(intx t, intx fixedDT) {
     vector2x outDisplacement;
     vector2x outVelocity;
+    std::vector<BoxCollider*> outColliders;
     for (auto rb : this->rigidBodies) {
         rb->SimulateStep(fixedDT, outDisplacement, outVelocity);
         rb->ClearForce();
@@ -70,7 +83,7 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
         auto newPos = pos+outDisplacement;
         bool collisionHappened = false;
         vector2x contactNormal;
-        CheckCollisions(newPos, rb->GetRadiusSq(), collisionHappened, contactNormal);
+        CheckCollisions(rb, newPos, rb->GetRadiusSq(), collisionHappened, contactNormal, outColliders);
         if (collisionHappened) {
             vector2x oldVel = vel+outVelocity;
             int vel_mag = oldVel.lengthx();
@@ -81,14 +94,18 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
             if (vel_mag > FTOX(5.0f)) {
                 impulseForce = MULTX(vel_mag, FTOX(25.0f));
             }
-            vel_mag = MULTX(vel_mag, FTOX(0.8f));
+            
+            // (amudaliar) : uncomment this code for gradual reduction of velocity.
+            // vel_mag = MULTX(vel_mag, FTOX(0.8f));
+            //
+            
             auto newVel = (oldVel + contactNormal) * vel_mag;
             rb->SetRBVelocity(newVel);
             newPos = newPos + contactNormal*FTOX(0.1f);
             rb->SetRBPosition(newPos, true);
             
             rb->AddForce(contactNormal * impulseForce);
-            rb->TriggerCollisionEvent();
+            rb->TriggerCollisionEvent(outColliders);
         } else {
             rb->SetRBVelocity(vel+outVelocity);
             rb->SetRBPosition(pos+outDisplacement, true);
@@ -99,10 +116,11 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
     }
 }
 
-void Solver::CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal) {
+void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal, std::vector<BoxCollider*>& colliders) {
 //    printf("newPos %f, %f\n", XTOF(newPos.x), XTOF(newPos.y));
     collisionHappened = false;
     int collision_check_cntr=5;
+    colliders.clear();
     //bool bCollision=true;
     while(collision_check_cntr--) {
         bool bPenitration = false;
@@ -126,7 +144,7 @@ void Solver::CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHap
             bPenitration = false;
             
             //which one is the closest
-            int closest_length=GX_MAX_INT;
+            __int64_t closest_length=GX_MAX_INT;
             int closest_index=-1;
             
             for (int l=0; l<4; l++)
@@ -149,10 +167,13 @@ void Solver::CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHap
                         diff.normalizex();
     //                    float val=(ACTOR_COLLISION_RADIUS*m_pCommonDataPtr->getPortingMultiplier())+0.1f;
                         intx radius = pxMath::SQRT((__int64_t)radiusSq);
-                        vector2x calc_Pos(closestPt[closest_index] + diff*radius);
+                        auto contactPt = closestPt[closest_index];
+                        vector2x calc_Pos(contactPt + diff*radius);
                         avgPos+=calc_Pos;
                         avgNrml+=diff;
                         cnt++;
+                        colliders.push_back(boxCollider);
+                        boxCollider->CollidedWithRB(rb, contactPt, diff);
                         //DEBUG_PRINT("(%d), closestPt(%f, %f), calc_pos(%f, %f)", l, closestPtf[closest_index].x, closestPtf[closest_index].y, calc_Pos.x, calc_Pos.y);
                     }
                 }

@@ -17,7 +17,9 @@ Scene::Scene() {
     this->playerType = PLAYER_TYPE_MAX;
     this->pingTimeFromOtherPlayer = 0;
     this->window = nullptr;
-    statusMsg = "Connecting...";
+    this->statusMsg = "Connecting...";
+    this->inputMoveDown = false;
+    this->inputMoveUp = false;
 }
 
 Scene::~Scene() {
@@ -59,6 +61,24 @@ void Scene::Resize(float cx, float cy) {
 void Scene::Update() {
     Timer::update();
     if (this->gameState == GAME_START) {
+        
+        // procss input
+        if (this->inputMoveDown || this->inputMoveUp) {
+            if (this->inputMoveDown) {
+                if (this->playerType == PLAYER_FIRST) {
+                    this->player1.MoveDown();
+                } else if (this->playerType == PLAYER_SECOND) {
+                    this->player2.MoveDown();
+                }
+            }
+            if (this->inputMoveUp) {
+                if (this->playerType == PLAYER_FIRST) {
+                    this->player1.MoveUp();
+                } else if (this->playerType == PLAYER_SECOND) {
+                    this->player2.MoveUp();
+                }
+            }
+        }
         physicsSolver.UpdateSolver();
     }
 }
@@ -77,6 +97,9 @@ void Scene::Render() {
     leftWall.draw();
     rightWall.draw();
     topWall.draw();
+    
+    player1.draw();
+    player2.draw();
     //
     
     DrawStats();
@@ -114,6 +137,14 @@ void Scene::MouseBtnUp() {
     ApplyBoost();
 }
 
+void Scene::MoveStrickerUP(bool keyDown) {
+    this->inputMoveUp = keyDown;
+}
+
+void Scene::MoveStrickerDown(bool keyDown) {
+    this->inputMoveDown = keyDown;
+}
+
 void Scene::ApplyBoost() {
     auto vel = ball.GetRBVelocity();
     if (vel.lengthx()<FTOX(20.0f)) {
@@ -129,10 +160,14 @@ void Scene::OnNetworkMessage(const std::string& msg) {
     
     if (msg == "first" || msg == "second") {
         if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
+            this->physicsSolver.RemoveBoxCollider(&player1);
+            this->physicsSolver.RemoveBoxCollider(&player2);
             if (msg == "first") {
                 this->playerType = PLAYER_FIRST;
+                this->physicsSolver.AddBoxCollider(&player1);
             } else if (msg == "second") {
                 this->playerType = PLAYER_SECOND;
+                this->physicsSolver.AddBoxCollider(&player2);
             }
             NetworkManager::GetInstance().SendMessage("ping");
             pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec();
@@ -228,6 +263,9 @@ void Scene::OnGameInit() {
     topWall.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, FTOX(windowSize.y-40.0f)));
     ball.AddForce(vector2x(FTOX(-5000.0f), 0));
     
+    player1.InitBoxCollider(vector2x(ITOX(20), FTOX(windowSize.y*0.25f)), vector2x(ITOX(45), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
+    player2.InitBoxCollider(vector2x(ITOX(20), FTOX(windowSize.y*0.25f)), vector2x(FTOX(windowSize.x-65.0f), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
+
     physicsSolver.AddRigidBody(&ball);
     //    physicsSolver.AddRigidBody(&ball2);
     physicsSolver.AddBoxCollider(&ground);
@@ -243,5 +281,6 @@ void Scene::OnGameStart() {
 }
 
 void Scene::OnGameReset() {
-    
+    this->physicsSolver.RemoveBoxCollider(&player1);
+    this->physicsSolver.RemoveBoxCollider(&player2);
 }

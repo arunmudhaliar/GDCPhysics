@@ -11,6 +11,9 @@
 #include "core/transformx.h"
 #include "core/vector2x.h"
 #include "colliders/boxCollider.hpp"
+#include <vector>
+
+class BoxCollider;
 
 class RigidBody {
 public:
@@ -33,7 +36,7 @@ public:
     inline intx GetRadius() { return radius; }
     inline intx GetRadiusSq() { return radiusSq; }
     
-    void TriggerCollisionEvent() { OnCollision(); }
+    void TriggerCollisionEvent(std::vector<BoxCollider*>& colliders) { OnCollision(colliders); }
 protected:
     vector2x force;
     vector2x velocity;
@@ -46,5 +49,5 @@ protected:
     virtual void UpdatePositionFromRB(const vector2x& displacement) = 0;
     virtual void SetPositionFromRB(const vector2x& pos) = 0;
     
-    virtual void OnCollision() = 0;
+    virtual void OnCollision(std::vector<BoxCollider*>& colliders) = 0;
 };
