@@ -333,7 +333,7 @@ void Scene::OnGameInit() {
     
     // init scene
     physicsSolver.InitSolver();
-    ball.initBall(20.0f, 1.0f, vector2x(FTOX(windowSize.x*0.5f), ITOX(500)));
+    ball.initBall(35.0f, 1.0f, vector2x(FTOX(windowSize.x*0.5f), ITOX(500)));
     //    ball2.initBall(60.0f, 10.0f, vector2x(ITOX(800), ITOX(600)));
     ground.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, 0));
     leftWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(0, 0));
