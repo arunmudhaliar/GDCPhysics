@@ -9,8 +9,8 @@
 
 #include "scene.h"
 #include <OpenGL/gl.h>
-#include "core/Timer.h"
-#include "core/util.h"
+#include "../Physics/core/Timer.h"
+#include "../Physics/core/util.h"
 
 Scene::Scene() {
     this->gameState = GAME_STATE_MAX;

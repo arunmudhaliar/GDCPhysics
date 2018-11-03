@@ -1,7 +1,7 @@
 #include "appEntry.h"
 #include <iostream>
 
-#include "Physics/scene.h"
+#include "Scene/scene.h"
 
 bool g_mControlKeyPressed = false;
 bool g_mAppInitialised = false;

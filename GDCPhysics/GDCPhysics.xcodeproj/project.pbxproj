@@ -11,9 +11,9 @@
 		5545E6CC218DC85A003641E1 /* gxFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6CA218DC85A003641E1 /* gxFile.cpp */; };
 		5545E6D6218DDB03003641E1 /* res in Resources */ = {isa = PBXBuildFile; fileRef = 5545E6D5218DDB03003641E1 /* res */; };
 		5545E6DD218DE31B003641E1 /* OSUtils.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6DC218DE31B003641E1 /* OSUtils.mm */; };
+		5545E6E4218E166B003641E1 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6E0218E166B003641E1 /* scene.cpp */; };
+		5545E6E5218E166B003641E1 /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6E3218E166B003641E1 /* ball.cpp */; };
 		556419F5218B5C33004C81D3 /* solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556419F4218B5C33004C81D3 /* solver.cpp */; };
-		55CC15662187A92500236749 /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15652187A92500236749 /* ball.cpp */; };
-		55CC15692187A9D100236749 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15682187A9D100236749 /* scene.cpp */; };
 		55CC15712187B33A00236749 /* types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC156B2187B33A00236749 /* types.cpp */; };
 		55CC15762187B4C700236749 /* rigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15752187B4C700236749 /* rigidBody.cpp */; };
 		55D2A8572187A00700D32E4D /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55D2A8562187A00700D32E4D /* AppDelegate.mm */; };
@@ -77,6 +77,10 @@
 		5545E6D5218DDB03003641E1 /* res */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res; sourceTree = "<group>"; };
 		5545E6DC218DE31B003641E1 /* OSUtils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OSUtils.mm; sourceTree = "<group>"; };
 		5545E6DE218DE364003641E1 /* OSUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OSUtils.h; sourceTree = "<group>"; };
+		5545E6E0218E166B003641E1 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
+		5545E6E1218E166B003641E1 /* ball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ball.h; sourceTree = "<group>"; };
+		5545E6E2218E166B003641E1 /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
+		5545E6E3218E166B003641E1 /* ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ball.cpp; sourceTree = "<group>"; };
 		556419EF218B5C33004C81D3 /* solver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = solver.hpp; sourceTree = "<group>"; };
 		556419F4218B5C33004C81D3 /* solver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = solver.cpp; sourceTree = "<group>"; };
 		556419F6218B6FED004C81D3 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
@@ -84,10 +88,6 @@
 		55CC155C2187A51F00236749 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		55CC155F2187A56600236749 /* ForceFeedback.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ForceFeedback.framework; path = System/Library/Frameworks/ForceFeedback.framework; sourceTree = SDKROOT; };
 		55CC15612187A58B00236749 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
-		55CC15642187A92500236749 /* ball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ball.h; sourceTree = "<group>"; };
-		55CC15652187A92500236749 /* ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ball.cpp; sourceTree = "<group>"; };
-		55CC15672187A9D100236749 /* scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = scene.h; sourceTree = "<group>"; };
-		55CC15682187A9D100236749 /* scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = scene.cpp; sourceTree = "<group>"; };
 		55CC156B2187B33A00236749 /* types.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = types.cpp; sourceTree = "<group>"; };
 		55CC156C2187B33A00236749 /* pxMath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pxMath.h; sourceTree = "<group>"; };
 		55CC156D2187B33A00236749 /* vector2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vector2.h; sourceTree = "<group>"; };
@@ -255,6 +255,17 @@
 			path = GUI;
 			sourceTree = "<group>";
 		};
+		5545E6DF218E166B003641E1 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				5545E6E0218E166B003641E1 /* scene.cpp */,
+				5545E6E1218E166B003641E1 /* ball.h */,
+				5545E6E2218E166B003641E1 /* scene.h */,
+				5545E6E3218E166B003641E1 /* ball.cpp */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
 		55CC15632187A92500236749 /* Physics */ = {
 			isa = PBXGroup;
 			children = (
@@ -264,11 +275,7 @@
 				55CC15752187B4C700236749 /* rigidBody.cpp */,
 				55CC15742187B4C700236749 /* rigidBody.h */,
 				55CC156A2187B33A00236749 /* core */,
-				55CC15682187A9D100236749 /* scene.cpp */,
-				55CC15672187A9D100236749 /* scene.h */,
 				55DF03372188EE06004307F7 /* renderObject.h */,
-				55CC15642187A92500236749 /* ball.h */,
-				55CC15652187A92500236749 /* ball.cpp */,
 			);
 			path = Physics;
 			sourceTree = "<group>";
@@ -358,6 +365,7 @@
 		55D2A8792187A27700D32E4D /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				5545E6DF218E166B003641E1 /* Scene */,
 				5545E6C6218DC809003641E1 /* GUI */,
 				55FEBD6B218C8D53002349CA /* Connection */,
 				55FEBCF5218C8CAC002349CA /* websocketpp */,
@@ -781,15 +789,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				55CC15692187A9D100236749 /* scene.cpp in Sources */,
 				5545E6DD218DE31B003641E1 /* OSUtils.mm in Sources */,
-				55CC15662187A92500236749 /* ball.cpp in Sources */,
 				55FEBD6E218C8D70002349CA /* NetworkManager.cpp in Sources */,
+				5545E6E5218E166B003641E1 /* ball.cpp in Sources */,
 				55D2A85F2187A00800D32E4D /* main.mm in Sources */,
 				55D2A8572187A00700D32E4D /* AppDelegate.mm in Sources */,
 				55FEBCF4218C71BB002349CA /* Timer.cpp in Sources */,
 				5545E6CC218DC85A003641E1 /* gxFile.cpp in Sources */,
 				55CC15762187B4C700236749 /* rigidBody.cpp in Sources */,
+				5545E6E4218E166B003641E1 /* scene.cpp in Sources */,
 				55DF03362188DE47004307F7 /* appEntry.cpp in Sources */,
 				5545E6C9218DC809003641E1 /* geFontManager.cpp in Sources */,
 				55CC15712187B33A00236749 /* types.cpp in Sources */,

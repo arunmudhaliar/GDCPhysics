@@ -9,8 +9,8 @@
 //
 
 #include "ball.h"
-#include "colliders/boxCollider.hpp"
-#include "solver.hpp"
+#include "../Physics/colliders/boxCollider.hpp"
+#include "../Physics/solver.hpp"
 #include "../Connection/NetworkManager.hpp"
 #include "../GUI/geFontManager.h"
 #include <SDL2/SDL.h>
