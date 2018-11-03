@@ -92,6 +92,9 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
             
             intx impulseForce = vel_mag;
             if (vel_mag > FTOX(5.0f)) {
+                if (vel_mag > ITOX(600)) {
+                    vel_mag = ITOX(600);
+                }
                 impulseForce = MULTX(vel_mag, FTOX(25.0f));
                 if (impulseForce > ITOX(8000)) {
                     impulseForce = ITOX(8000);
