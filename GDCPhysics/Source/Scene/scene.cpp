@@ -164,7 +164,7 @@ void Scene::MoveStrickerUP(bool keyDown) {
             auto pos = this->player1.GetPosition();
             msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
         } else if (this->playerType == PLAYER_SECOND) {
-            auto pos = this->player1.GetPosition();
+            auto pos = this->player2.GetPosition();
             msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
         }
         NetworkManager::GetInstance().SendMessage(msg);
@@ -179,7 +179,7 @@ void Scene::MoveStrickerDown(bool keyDown) {
             auto pos = this->player1.GetPosition();
             msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
         } else if (this->playerType == PLAYER_SECOND) {
-            auto pos = this->player1.GetPosition();
+            auto pos = this->player2.GetPosition();
             msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
         }
         NetworkManager::GetInstance().SendMessage(msg);
