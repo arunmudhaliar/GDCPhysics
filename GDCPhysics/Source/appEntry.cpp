@@ -22,12 +22,12 @@ int GDCPhysics::appEntry() {
                                            "GDCPhysics",             // window title
                                            SDL_WINDOWPOS_CENTERED,     // x position, centered
                                            SDL_WINDOWPOS_CENTERED,     // y position, centered
-                                           640,                        // width, in pixels
-                                           480,                        // height, in pixels
-                                           SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN  | SDL_WINDOW_RESIZABLE  /*|  SDL_WINDOW_ALLOW_HIGHDPI */   // flags
+                                           800,                        // width, in pixels
+                                           600,                        // height, in pixels
+                                           SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN  /*| SDL_WINDOW_RESIZABLE  |  SDL_WINDOW_ALLOW_HIGHDPI */   // flags
                                            );
 	
-    SDL_MaximizeWindow(window);
+    // SDL_MaximizeWindow(window);
 
     int window_cx=1;
     int window_cy=1;

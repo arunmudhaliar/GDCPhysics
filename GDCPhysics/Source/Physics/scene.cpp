@@ -14,6 +14,8 @@
 
 Scene::Scene() {
     this->gameState = GAME_STATE_MAX;
+    this->playerType = PLAYER_TYPE_MAX;
+    this->pingTimeFromOtherPlayer = 0;
 }
 
 Scene::~Scene() {
@@ -24,6 +26,7 @@ void Scene::InitScene(float cx, float cy) {
     windowSize.set(cx, cy);
     
     SetGameState(GAME_INIT);
+    Resize(cx*2.0f, cy*2.0f);
 }
 
 void Scene::InternalGLStates() {
@@ -80,14 +83,17 @@ void Scene::MouseBtnUp() {
     }
     
     SendBallState();
-    NetworkManager::GetInstance().SendMessage("input");
-    
+    NetworkManager::GetInstance().SendMessage("boost");
+    ApplyBoost();
+}
+
+void Scene::ApplyBoost() {
     auto vel = ball.GetRBVelocity();
     if (vel.lengthx()<FTOX(20.0f)) {
         ball.AddForce(vector2x(FTOX(-2000.0f), FTOX(5000.0f)));
     } else {
         vel.normalizex();
-        ball.AddForce(vel*ITOX(20000));
+        ball.AddForce(vel*ITOX(8000));
     }
 }
 
@@ -103,16 +109,26 @@ void Scene::OnNetworkMessage(const std::string& msg) {
     
     if (msg == "first" || msg == "second") {
         if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
+            if (msg == "first") {
+                this->playerType = PLAYER_FIRST;
+            } else if (msg == "second") {
+                this->playerType = PLAYER_SECOND;
+            }
+            NetworkManager::GetInstance().SendMessage("ping");
+            pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec();
+        }
+    } else if (msg == "ping") {
+        pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec()-pingTimeFromOtherPlayer;
+        printf("PING TIME %lu ms.\n", pingTimeFromOtherPlayer);
+        if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
+            NetworkManager::GetInstance().SendMessage("ping_akn");
+        }
+    } else if (msg == "startgame") {
+        if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
             SetGameState(GAME_START);
         }
-    } else if (msg == "input") {
-        auto vel = ball.GetRBVelocity();
-        if (vel.lengthx()<FTOX(20.0f)) {
-            ball.AddForce(vector2x(FTOX(-2000.0f), FTOX(5000.0f)));
-        } else {
-            vel.normalizex();
-            ball.AddForce(vel*ITOX(20000));
-        }
+    } else if (msg == "boost") {
+        ApplyBoost();
     } else {
         std::vector<std::string> lines;
         util::splitString(msg, lines);
@@ -180,12 +196,12 @@ void Scene::OnGameInit() {
     
     // init scene
     physicsSolver.InitSolver();
-    ball.initBall(60.0f, 1.0f, vector2x(ITOX(600), ITOX(600)));
+    ball.initBall(20.0f, 1.0f, vector2x(FTOX(windowSize.x*0.5f), ITOX(500)));
     //    ball2.initBall(60.0f, 10.0f, vector2x(ITOX(800), ITOX(600)));
-    ground.InitBoxCollider(vector2x(ITOX(1400), ITOX(100)), vector2x(0, 0));
-    leftWall.InitBoxCollider(vector2x(ITOX(60), ITOX(1000)), vector2x(0, 0));
-    rightWall.InitBoxCollider(vector2x(ITOX(60), ITOX(1000)), vector2x(ITOX(1400), 0));
-    topWall.InitBoxCollider(vector2x(ITOX(1400), ITOX(100)), vector2x(0, ITOX(700)));
+    ground.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, 0));
+    leftWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(0, 0));
+    rightWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(FTOX(windowSize.x-40.0f), 0));
+    topWall.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, FTOX(windowSize.y-40.0f)));
     ball.AddForce(vector2x(FTOX(-5000.0f), 0));
     
     physicsSolver.AddRigidBody(&ball);

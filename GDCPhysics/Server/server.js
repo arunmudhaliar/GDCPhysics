@@ -3,7 +3,8 @@ class Room {
     this._first = null;
     this._second = null;
     this._name = roomname;
-
+    this._pingAknReceivedFromFirst = 0;
+    this._pingAknReceivedFromSecond = 0;
     console.log("Room created "+this.name);
   }
   // set name(name) {
@@ -20,15 +21,25 @@ class Room {
   get second() {
     return this._second;
   }
+  get pingAknReceivedFromFirst() {
+    return this._pingAknReceivedFromFirst;
+  }
+  get pingAknReceivedFromSecond() {
+    return this._pingAknReceivedFromSecond;
+  }
+
+  get isPingAknReceivedFromBothPlayers() {
+    return this._pingAknReceivedFromFirst && this._pingAknReceivedFromSecond;
+  }
 
   set first(connectionPtr) {
     this._first = connectionPtr;
-    console.log("first set " + this._first);
+    console.log("first set " + this._first.remoteAddress);
   }
 
   set second(connectionPtr) {
     this._second = connectionPtr;
-    console.log("second set " + this._second);
+    console.log("second set " + this._second.remoteAddress);
   }
 
   get isWaiting() {
@@ -36,7 +47,7 @@ class Room {
   }
 
   isMemberOfThisRoom(remoteAddress) {
-    console.log("search for "+remoteAddress);
+    // console.log("search for "+remoteAddress);
     // console.log("first "+this._first.remoteAddress);
     // console.log("second "+this._second.remoteAddress);
 
@@ -52,6 +63,12 @@ class Room {
 
   startGame() {
     console.log("startGame for room "+this.name);
+    this._first.send("startgame");
+    this._second.send("startgame");
+  }
+
+  initGame() {
+    console.log("initGame for room "+this.name);
     this._first.send("first");
     this._second.send("second");
   }
@@ -104,7 +121,7 @@ wsServer.on('request', function(request) {
   if (r) {
     console.log("some one waiting ... ");
     r.second = connection;
-    r.startGame();
+    r.initGame();
   } else {
     var newRoom = new Room("room"+rooms.length);
     newRoom.first = connection;
@@ -118,7 +135,10 @@ wsServer.on('request', function(request) {
       // process WebSocket message
       console.log(message.utf8Data);
       console.log("connection msg "+getIP(connection));
-      messagePass(connection, message.utf8Data);
+      //messagePass(connection, message.utf8Data);
+      setTimeout(function() {
+        messagePass(connection, message.utf8Data);
+      }, 200);
     }
   });
 
@@ -148,7 +168,6 @@ function waitingRoom() {
 function stopGame(connection) {
   var index = -1;
   for (i=0;i<rooms.length;i++) {
-    console.log("searching room "+rooms[i].name);
     if (rooms[i].isMemberOfThisRoom(getIP(connection)) > 0) {
       rooms[i].stopGame(connection);
       index = i;
@@ -164,16 +183,29 @@ function stopGame(connection) {
 
 function messagePass(connection, msg) {
   for (i=0;i<rooms.length;i++) {
-    console.log("searching room "+rooms[i].name);
     var playerID = rooms[i].isMemberOfThisRoom(getIP(connection))
     if (playerID > 0) {
       if (playerID == 1) {
-        if (rooms[i].second) {
-          rooms[i].second.send(msg);
+        if (msg == "ping_akn") {
+          rooms[i]._pingAknReceivedFromFirst = 1;
+          if (rooms[i]._pingAknReceivedFromSecond) {
+            rooms[i].startGame();
+          }
+        } else {
+          if (rooms[i].second) {
+            rooms[i].second.send(msg);
+          }
         }
       } else if (playerID == 2) {
-        if (rooms[i].first) {
-          rooms[i].first.send(msg);
+        if (msg == "ping_akn") {
+          rooms[i]._pingAknReceivedFromSecond = 1;
+          if (rooms[i]._pingAknReceivedFromFirst) {
+            rooms[i].startGame();
+          }
+        } else {
+          if (rooms[i].first) {
+            rooms[i].first.send(msg);
+          }
         }
       }
       break;

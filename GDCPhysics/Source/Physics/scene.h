@@ -22,6 +22,12 @@ public:
         GAME_STATE_MAX
     };
     
+    enum PLAYER_TYPE {
+        PLAYER_FIRST,
+        PLAYER_SECOND,
+        PLAYER_TYPE_MAX
+    };
+    
     Scene();
     ~Scene();
     
@@ -56,7 +62,10 @@ protected:
     
     void SendBallState();
     
+    void ApplyBoost();
 private:
     void InternalGLStates();
     GAME_STATE gameState;
+    PLAYER_TYPE playerType;
+    unsigned long pingTimeFromOtherPlayer;
 };
