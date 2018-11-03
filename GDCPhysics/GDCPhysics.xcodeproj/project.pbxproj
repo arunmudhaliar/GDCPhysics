@@ -258,9 +258,9 @@
 		5545E6DF218E166B003641E1 /* Scene */ = {
 			isa = PBXGroup;
 			children = (
+				5545E6E2218E166B003641E1 /* scene.h */,
 				5545E6E0218E166B003641E1 /* scene.cpp */,
 				5545E6E1218E166B003641E1 /* ball.h */,
-				5545E6E2218E166B003641E1 /* scene.h */,
 				5545E6E3218E166B003641E1 /* ball.cpp */,
 			);
 			path = Scene;

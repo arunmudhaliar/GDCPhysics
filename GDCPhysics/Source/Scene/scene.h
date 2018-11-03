@@ -62,8 +62,6 @@ protected:
     void OnGameStart();
     void OnGameReset();
     
-    void SendBallState();
-    
     void ApplyBoost();
     
     void DrawStats();

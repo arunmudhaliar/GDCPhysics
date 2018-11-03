@@ -17,6 +17,7 @@ public:
     ~Ball();
     
     void initBall(float size, float mass, const vector2x& pos);
+    void SendBallState();
     
 protected:
     float vertexBuffer[36*2];
@@ -26,4 +27,5 @@ protected:
     // rb
     virtual void UpdatePositionFromRB(const vector2x& displacement);
     virtual void SetPositionFromRB(const vector2x& pos);
+    virtual void OnCollision();
 };

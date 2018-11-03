@@ -8,6 +8,8 @@
 //
 
 #include "ball.h"
+#include "../Physics/core/util.h"
+#include "../Connection/NetworkManager.hpp"
 
 Ball::Ball() {
     this->size = 0;
@@ -51,4 +53,15 @@ void Ball::UpdatePositionFromRB(const vector2x& displacement) {
 
 void Ball::SetPositionFromRB(const vector2x& pos) {
     setPositionx(pos);
+}
+
+void Ball::OnCollision() {
+    SendBallState();
+}
+
+void Ball::SendBallState() {
+    auto pos = GetRBPosition();
+    auto velocity = GetRBVelocity();
+    auto msg = util::stringFormat("ball|%d,%d,%d,%d", pos.x, pos.y, velocity.x, velocity.y);
+    NetworkManager::GetInstance().SendMessage(msg);
 }

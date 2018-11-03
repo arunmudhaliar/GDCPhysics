@@ -109,7 +109,7 @@ void Scene::MouseBtnUp() {
         return;
     }
     
-    SendBallState();
+    this->ball.SendBallState();
     NetworkManager::GetInstance().SendMessage("boost");
     ApplyBoost();
 }
@@ -122,13 +122,6 @@ void Scene::ApplyBoost() {
         vel.normalizex();
         ball.AddForce(vel*ITOX(8000));
     }
-}
-
-void Scene::SendBallState() {
-    auto pos = this->ball.GetRBPosition();
-    auto velocity = this->ball.GetRBVelocity();
-    auto msg = util::stringFormat("ball|%d,%d,%d,%d", pos.x, pos.y, velocity.x, velocity.y);
-    NetworkManager::GetInstance().SendMessage(msg);
 }
 
 void Scene::OnNetworkMessage(const std::string& msg) {

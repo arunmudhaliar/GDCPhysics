@@ -88,6 +88,7 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
             rb->SetRBPosition(newPos, true);
             
             rb->AddForce(contactNormal * impulseForce);
+            rb->TriggerCollisionEvent();
         } else {
             rb->SetRBVelocity(vel+outVelocity);
             rb->SetRBPosition(pos+outDisplacement, true);
@@ -142,11 +143,6 @@ void Solver::CheckCollisions(vector2x& newPos, intx radiusSq, bool& collisionHap
                         diff=-diff;
                     }
                     
-                    if (l==0) {
-                        float lq = XTOF(closest_length);
-//                        printf("closestPt %f, %f, r:%f\n", XTOF(closestPt[0].x), XTOF(closestPt[0].y), sqrt(lq));
-//                        printf("closest_length %f\n", XTOF(closest_length));
-                    }
                     if(closest_length <= radiusSq)
                     {
                         //collision occured
