@@ -343,6 +343,8 @@ void Scene::OnGameInit() {
     
     player1.InitBoxCollider(vector2x(ITOX(20), FTOX(windowSize.y*0.25f)), vector2x(ITOX(45), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
     player2.InitBoxCollider(vector2x(ITOX(20), FTOX(windowSize.y*0.25f)), vector2x(FTOX(windowSize.x-65.0f), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
+    player1.SetWindowHeight(this->windowSize.y);
+    player2.SetWindowHeight(this->windowSize.y);
 
     physicsSolver.AddRigidBody(&ball);
     //    physicsSolver.AddRigidBody(&ball2);

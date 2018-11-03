@@ -18,8 +18,10 @@ public:
     
     void MoveUp();
     void MoveDown();
-    
+    void SetWindowHeight(float height)    { windowHeight = height; }
 protected:
     void OnCollidedWithRB(RigidBody* rb, const vector2x& contactPt, const vector2x& contactNormal) override;
+    
+    float windowHeight;
 };
 #endif /* stricker_hpp */
