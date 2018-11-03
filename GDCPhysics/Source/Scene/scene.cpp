@@ -20,6 +20,8 @@ Scene::Scene() {
     this->statusMsg = "Connecting...";
     this->inputMoveDown = false;
     this->inputMoveUp = false;
+    this->remoteInputMoveDown = false;
+    this->remoteInputMoveUp = false;
 }
 
 Scene::~Scene() {
@@ -76,6 +78,24 @@ void Scene::Update() {
                     this->player1.MoveUp();
                 } else if (this->playerType == PLAYER_SECOND) {
                     this->player2.MoveUp();
+                }
+            }
+        }
+        
+        // remote input
+        if (this->remoteInputMoveDown || this->remoteInputMoveUp) {
+            if (this->remoteInputMoveDown) {
+                if (this->playerType == PLAYER_FIRST) {
+                    this->player2.MoveDown();
+                } else if (this->playerType == PLAYER_SECOND) {
+                    this->player1.MoveDown();
+                }
+            }
+            if (this->remoteInputMoveUp) {
+                if (this->playerType == PLAYER_FIRST) {
+                    this->player2.MoveUp();
+                } else if (this->playerType == PLAYER_SECOND) {
+                    this->player1.MoveUp();
                 }
             }
         }
@@ -138,10 +158,18 @@ void Scene::MouseBtnUp() {
 }
 
 void Scene::MoveStrickerUP(bool keyDown) {
+    if (this->inputMoveUp != keyDown) {
+        std::string msg = (keyDown) ? "stricker_up|1" : "stricker_up|0";
+        NetworkManager::GetInstance().SendMessage(msg);
+    }
     this->inputMoveUp = keyDown;
 }
 
 void Scene::MoveStrickerDown(bool keyDown) {
+    if (this->inputMoveDown != keyDown) {
+        std::string msg = (keyDown) ? "stricker_down|1" : "stricker_down|0";
+        NetworkManager::GetInstance().SendMessage(msg);
+    }
     this->inputMoveDown = keyDown;
 }
 
@@ -208,6 +236,12 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                     intx fy = atoi(args[1].c_str());
                     this->ball.AddForce(vector2x(fx, fy));
                 }
+            } else if (lines[0] == "stricker_up" && lines.size()==2) {
+                int val = atoi(lines[1].c_str());
+                this->remoteInputMoveUp = (val==1);
+            } else if (lines[0] == "stricker_down" && lines.size()==2) {
+                int val = atoi(lines[1].c_str());
+                this->remoteInputMoveDown = (val==1);
             }
         }
     }
@@ -291,4 +325,9 @@ void Scene::OnGameStart() {
 void Scene::OnGameReset() {
     this->physicsSolver.RemoveBoxCollider(&player1);
     this->physicsSolver.RemoveBoxCollider(&player2);
+    
+    this->remoteInputMoveDown = false;
+    this->remoteInputMoveUp = false;
+    this->inputMoveUp = false;
+    this->inputMoveDown = false;
 }

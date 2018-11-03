@@ -83,4 +83,8 @@ private:
     
     bool inputMoveDown;
     bool inputMoveUp;
+    
+    bool remoteInputMoveDown;
+    bool remoteInputMoveUp;
+
 };
