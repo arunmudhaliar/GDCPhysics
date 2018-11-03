@@ -937,8 +937,7 @@
 					ASIO_STANDALONE,
 				);
 				HEADER_SEARCH_PATHS = (
-					"/Users/amudaliar/Documents/PROJECTS/PERSONAL/GDCRepo/GDCPhysics/Source/freetype-2.9.1/include/freetype2",
-					"/Users/amudaliar/Documents/PROJECTS/PERSONAL/GDCRepo/GDCPhysics/Source/websocketpp-master",
+					"\"$(SRCROOT)/Source/websocketpp-master\"",
 					"\"$(SRCROOT)/Source/asiosdk\"",
 				);
 				INFOPLIST_FILE = GDCPhysics/Info.plist;
@@ -946,13 +945,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/freetype-2.9.1/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.moonfrog.GDCPhysics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REZ_SEARCH_PATHS = "\"$(SRCROOT)/Source/freetype-2.9.1/lib\"";
+				REZ_SEARCH_PATHS = "";
 			};
 			name = Debug;
 		};
@@ -964,8 +960,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 398J48G7VH;
 				HEADER_SEARCH_PATHS = (
-					"/Users/amudaliar/Documents/PROJECTS/PERSONAL/GDCRepo/GDCPhysics/Source/freetype-2.9.1/include/freetype2",
-					"/Users/amudaliar/Documents/PROJECTS/PERSONAL/GDCRepo/GDCPhysics/Source/websocketpp-master",
+					"\"$(SRCROOT)/Source/websocketpp-master\"",
 					"\"$(SRCROOT)/Source/asiosdk\"",
 				);
 				INFOPLIST_FILE = GDCPhysics/Info.plist;
@@ -973,13 +968,10 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/freetype-2.9.1/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.moonfrog.GDCPhysics;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				REZ_SEARCH_PATHS = "\"$(SRCROOT)/Source/freetype-2.9.1/lib\"";
+				REZ_SEARCH_PATHS = "";
 			};
 			name = Release;
 		};
