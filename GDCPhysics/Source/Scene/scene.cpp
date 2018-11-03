@@ -200,6 +200,14 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                     this->ball.SetRBVelocity(vector2x(vx, vy));
                     this->ball.SetRBPosition(vector2x(px, py));
                 }
+            } else if (lines[0] == "stricker" && lines.size()==2) {
+                std::vector<std::string> args;
+                util::splitString(lines[1], args, ',');
+                if (args.size()==2) {
+                    intx fx = atoi(args[0].c_str());
+                    intx fy = atoi(args[1].c_str());
+                    this->ball.AddForce(vector2x(fx, fy));
+                }
             }
         }
     }

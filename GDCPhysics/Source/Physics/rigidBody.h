@@ -35,6 +35,7 @@ public:
     inline intx GetRBMass() { return mass; }
     inline intx GetRadius() { return radius; }
     inline intx GetRadiusSq() { return radiusSq; }
+    inline vector2x& GetRBForce()   { return force; }
     
     void TriggerCollisionEvent(std::vector<BoxCollider*>& colliders) { OnCollision(colliders); }
 protected:

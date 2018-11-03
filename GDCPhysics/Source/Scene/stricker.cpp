@@ -8,6 +8,7 @@
 
 #include "stricker.hpp"
 #include "../Physics/core/Timer.h"
+#include "ball.h"
 
 Stricker::Stricker() : BoxCollider() {
 }
@@ -28,4 +29,14 @@ void Stricker::MoveDown() {
 void Stricker::OnCollidedWithRB(RigidBody* rb, const vector2x& contactPt, const vector2x& contactNormal) {
     vector2x n = contactNormal;
     rb->AddForce(n * ITOX(1000));
+    
+//    Ball* ball = dynamic_cast<Ball*>(rb);
+//    if (ball) {
+//        ball->SendBallState();
+//    }
+    
+//    auto pos = GetRBPosition();
+//    auto velocity = GetRBVelocity();
+//    auto msg = util::stringFormat("ball|%d,%d,%d,%d", pos.x, pos.y, velocity.x, velocity.y);
+//    NetworkManager::GetInstance().SendMessage(msg);
 }

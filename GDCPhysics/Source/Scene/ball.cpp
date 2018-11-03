@@ -10,6 +10,7 @@
 #include "ball.h"
 #include "../Physics/core/util.h"
 #include "../Connection/NetworkManager.hpp"
+#include "stricker.hpp"
 
 Ball::Ball() {
     this->size = 0;
@@ -56,6 +57,18 @@ void Ball::SetPositionFromRB(const vector2x& pos) {
 }
 
 void Ball::OnCollision(std::vector<BoxCollider*>& colliders) {
+    for(auto c : colliders) {
+        Stricker* stricker = dynamic_cast<Stricker*>(c);
+        if (stricker) {
+            SendBallState();
+
+            // send striker force
+            auto force = this->force;
+            auto msg = util::stringFormat("stricker|%d,%d", this->force.x, this->force.y);
+            NetworkManager::GetInstance().SendMessage(msg);
+            //
+        }
+    }
 }
 
 void Ball::SendBallState() {
