@@ -1046,7 +1046,7 @@ void geFontManager::InitializeFonts()
 
     
     if (g_pFontArial10_84Ptr) {
-        g_pFontArial10_84Ptr->setRGBA(0.7f, 0.7f, 0.7f);
+        g_pFontArial10_84Ptr->setRGBA(0.9f, 0.9f, 0.9f);
     }
     if (g_pFontArial10_80Ptr) {
         g_pFontArial10_80Ptr->setRGBA(0.5f, 0.5f, 0.5f);

@@ -37,7 +37,7 @@ void Ball::OnRender() {
     auto p = getOpenGLMatrix();
     glPushMatrix();
     glTranslatef(XTOF(p[12]), XTOF(p[13]), XTOF(p[14]));
-    glColor3f(1, 1, 0);
+    glColor3f(1, 0, 0.2f);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
 //    glEnableClientState(GL_COLOR_ARRAY);

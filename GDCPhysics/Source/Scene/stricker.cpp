@@ -37,14 +37,18 @@ void Stricker::MoveDown() {
 void Stricker::OnCollidedWithRB(RigidBody* rb, const vector2x& contactPt, const vector2x& contactNormal) {
     vector2x n = contactNormal;
     rb->AddForce(n * ITOX(1000));
-    
-//    Ball* ball = dynamic_cast<Ball*>(rb);
-//    if (ball) {
-//        ball->SendBallState();
-//    }
-    
-//    auto pos = GetRBPosition();
-//    auto velocity = GetRBVelocity();
-//    auto msg = util::stringFormat("ball|%d,%d,%d,%d", pos.x, pos.y, velocity.x, velocity.y);
-//    NetworkManager::GetInstance().SendMessage(msg);
+}
+
+void Stricker::OnRender() {
+    glPushMatrix();
+    glTranslatef(XTOF(this->position.x), XTOF(this->position.y), 0);
+    glColor3f(0.7f, 0.5, 1);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
+    //    glEnableClientState(GL_COLOR_ARRAY);
+    //    glColorPointer(4, GL_FLOAT, 0, vbuffer->m_cszVertexColorList);
+    glDrawArrays(GL_LINE_LOOP, 0, 4);
+    //    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
 }
