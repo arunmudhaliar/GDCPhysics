@@ -19,11 +19,16 @@ Wall::~Wall() {
 
 void Wall::OnCollidedWithRB(RigidBody* rb, const vector2x& contactPt, const vector2x& contactNormal) {
     Scene& scene = Scene::GetInstance();
+    if (scene.GetGoalElapsed()<1.0f) {
+        return;
+    }
     auto playerType = scene.GetPlayerType();
     if (playerType == Scene::PLAYER_FIRST && this->type==WALL_TYPE::LEFT) {
         NetworkManager::GetInstance().SendMessage("goal");
+        scene.ClearGoalElapsed();
     } else if (playerType == Scene::PLAYER_SECOND && this->type==WALL_TYPE::RIGHT) {
         NetworkManager::GetInstance().SendMessage("goal");
+        scene.ClearGoalElapsed();
     }
 }
 

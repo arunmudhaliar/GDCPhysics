@@ -29,6 +29,7 @@ Scene::Scene() {
     this->remoteInputMoveUp = false;
     this->player1Score = "0";
     this->player2Score = "0";
+    this->goalElapsedTime = 0.0f;
 }
 
 Scene::~Scene() {
@@ -70,6 +71,8 @@ void Scene::Resize(float cx, float cy) {
 void Scene::Update() {
     Timer::update();
     if (this->gameState == GAME_START) {
+        
+        this->goalElapsedTime+= Timer::getDtinSec();
         
         // procss input
         if (this->inputMoveDown || this->inputMoveUp) {

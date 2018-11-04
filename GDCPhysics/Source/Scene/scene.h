@@ -50,6 +50,8 @@ public:
     void MoveStrickerDown(bool keyDown);
     
     PLAYER_TYPE GetPlayerType() { return this->playerType; }
+    float GetGoalElapsed()  { return this->goalElapsedTime; }
+    void ClearGoalElapsed() { this->goalElapsedTime = 0.0f; }
     
 protected:
     vector2f windowSize;
@@ -96,4 +98,5 @@ private:
     bool remoteInputMoveUp;
     std::string player1Score;
     std::string player2Score;
+    float goalElapsedTime;
 };
