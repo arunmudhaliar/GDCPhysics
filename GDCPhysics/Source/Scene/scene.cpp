@@ -212,10 +212,6 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                 this->playerType = PLAYER_SECOND;
                 this->physicsSolver.AddBoxCollider(&player2);
             }
-            //
-            this->physicsSolver.AddBoxCollider(&player1);
-            this->physicsSolver.AddBoxCollider(&player2);
-            //
             NetworkManager::GetInstance().SendMessage("ping");
             pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec();
         }
@@ -244,8 +240,8 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                     intx vx = atoi(args[2].c_str());
                     intx vy = atoi(args[3].c_str());
                     
-                    //this->ball.SetRBVelocity(vector2x(vx, vy));
-                    //this->ball.SetRBPosition(vector2x(px, py));
+                    this->ball.SetRBVelocity(vector2x(vx, vy));
+                    this->ball.SetRBPosition(vector2x(px, py));
                 }
             } else if (lines[0] == "stricker" && lines.size()==2) {
                 std::vector<std::string> args;
@@ -346,8 +342,8 @@ void Scene::OnGameInit() {
     topWall.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, FTOX(windowSize.y-40.0f)));
     ball.AddForce(vector2x(FTOX(-5000.0f), 0));
     
-    player1.InitBoxCollider(vector2x(ITOX(20), FTOX(windowSize.y*0.25f)), vector2x(ITOX(45), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
-    player2.InitBoxCollider(vector2x(ITOX(20), FTOX(windowSize.y*0.25f)), vector2x(FTOX(windowSize.x-65.0f), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
+    player1.InitBoxCollider(vector2x(ITOX(35), FTOX(windowSize.y*0.25f)), vector2x(ITOX(45), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
+    player2.InitBoxCollider(vector2x(ITOX(35), FTOX(windowSize.y*0.25f)), vector2x(FTOX(windowSize.x-80.0f), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
     player1.SetWindowHeight(this->windowSize.y);
     player2.SetWindowHeight(this->windowSize.y);
 
