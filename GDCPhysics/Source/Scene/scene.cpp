@@ -212,6 +212,10 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                 this->playerType = PLAYER_SECOND;
                 this->physicsSolver.AddBoxCollider(&player2);
             }
+            //
+            this->physicsSolver.AddBoxCollider(&player1);
+            this->physicsSolver.AddBoxCollider(&player2);
+            //
             NetworkManager::GetInstance().SendMessage("ping");
             pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec();
         }
@@ -240,8 +244,8 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                     intx vx = atoi(args[2].c_str());
                     intx vy = atoi(args[3].c_str());
                     
-                    this->ball.SetRBVelocity(vector2x(vx, vy));
-                    this->ball.SetRBPosition(vector2x(px, py));
+                    //this->ball.SetRBVelocity(vector2x(vx, vy));
+                    //this->ball.SetRBPosition(vector2x(px, py));
                 }
             } else if (lines[0] == "stricker" && lines.size()==2) {
                 std::vector<std::string> args;
