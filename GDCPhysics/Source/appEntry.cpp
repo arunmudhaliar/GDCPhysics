@@ -18,6 +18,7 @@ int GDCPhysics::appEntry() {
                                            480,                        // height, in pixels
                                            SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN  /*| SDL_WINDOW_RESIZABLE  |  SDL_WINDOW_ALLOW_HIGHDPI */   // flags
                                            );
+    
     int window_cx=1;
     int window_cy=1;
     SDL_GetWindowSize(window, &window_cx, &window_cy);
@@ -45,7 +46,7 @@ int GDCPhysics::appEntry() {
     
     Scene& gameScene = Scene::GetInstance();
     gameScene.InitScene(window, window_cx, window_cy);
-    
+
     bool quit=false;
     //While application is running
     while( !quit ) {
@@ -65,7 +66,7 @@ int GDCPhysics::appEntry() {
         gameScene.Update();
         gameScene.Render();
         
-        SDL_Delay(rand()%10);
+        SDL_Delay(5);
         
         //swapbuffer
         SDL_GL_SwapWindow( window );

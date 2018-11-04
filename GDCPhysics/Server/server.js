@@ -142,8 +142,8 @@ wsServer.on('request', function(request) {
   connection.on('message', function(message) {
     if (message.type === 'utf8') {
       // process WebSocket message
-      console.log(message.utf8Data);
-      console.log("connection msg "+getIP(connection));
+      // console.log(message.utf8Data);
+      // console.log("connection msg "+getIP(connection));
       messagePass(connection, message.utf8Data);
       // setTimeout(function() {
       //   messagePass(connection, message.utf8Data);
