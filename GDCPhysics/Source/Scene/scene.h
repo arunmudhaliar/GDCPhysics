@@ -10,6 +10,7 @@
 
 #include "ball.h"
 #include "stricker.hpp"
+#include "wall.hpp"
 #include "../Physics/colliders/boxCollider.hpp"
 #include "../Physics/solver.hpp"
 #include "../Connection/NetworkManager.hpp"
@@ -17,6 +18,9 @@
 #include <SDL2/SDL.h>
 
 class Scene : protected NetworkManagerDelegate {
+private:
+    Scene();
+    
 public:
     enum GAME_STATE {
         GAME_INIT,
@@ -31,7 +35,8 @@ public:
         PLAYER_TYPE_MAX
     };
     
-    Scene();
+    static Scene& GetInstance();
+    
     ~Scene();
     
     void InitScene(SDL_Window* window, float cx, float cy);
@@ -44,14 +49,17 @@ public:
     void MoveStrickerUP(bool keyDown);
     void MoveStrickerDown(bool keyDown);
     
+    PLAYER_TYPE GetPlayerType() { return this->playerType; }
+    
 protected:
     vector2f windowSize;
     Ball ball;
 //    Ball ball2;
-    BoxCollider ground;
-    BoxCollider leftWall;
-    BoxCollider rightWall;
-    BoxCollider topWall;
+    Wall ground;
+    Wall topWall;
+    Wall leftWall;
+    Wall rightWall;
+
     Solver physicsSolver;
     
     Stricker player1;
@@ -86,5 +94,6 @@ private:
     
     bool remoteInputMoveDown;
     bool remoteInputMoveUp;
-
+    std::string player1Score;
+    std::string player2Score;
 };

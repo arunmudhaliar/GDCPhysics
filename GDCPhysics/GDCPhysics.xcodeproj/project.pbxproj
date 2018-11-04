@@ -14,6 +14,7 @@
 		5545E6E4218E166B003641E1 /* scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6E0218E166B003641E1 /* scene.cpp */; };
 		5545E6E5218E166B003641E1 /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6E3218E166B003641E1 /* ball.cpp */; };
 		5545E6E8218E1F3E003641E1 /* stricker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6E6218E1F3E003641E1 /* stricker.cpp */; };
+		5545E6ED218ECB69003641E1 /* wall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5545E6EB218ECB69003641E1 /* wall.cpp */; };
 		556419F5218B5C33004C81D3 /* solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 556419F4218B5C33004C81D3 /* solver.cpp */; };
 		55CC15712187B33A00236749 /* types.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC156B2187B33A00236749 /* types.cpp */; };
 		55CC15762187B4C700236749 /* rigidBody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55CC15752187B4C700236749 /* rigidBody.cpp */; };
@@ -84,6 +85,8 @@
 		5545E6E3218E166B003641E1 /* ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ball.cpp; sourceTree = "<group>"; };
 		5545E6E6218E1F3E003641E1 /* stricker.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stricker.cpp; sourceTree = "<group>"; };
 		5545E6E7218E1F3E003641E1 /* stricker.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = stricker.hpp; sourceTree = "<group>"; };
+		5545E6EB218ECB69003641E1 /* wall.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wall.cpp; sourceTree = "<group>"; };
+		5545E6EC218ECB69003641E1 /* wall.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wall.hpp; sourceTree = "<group>"; };
 		556419EF218B5C33004C81D3 /* solver.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = solver.hpp; sourceTree = "<group>"; };
 		556419F4218B5C33004C81D3 /* solver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = solver.cpp; sourceTree = "<group>"; };
 		556419F6218B6FED004C81D3 /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = util.h; sourceTree = "<group>"; };
@@ -267,6 +270,8 @@
 				5545E6E3218E166B003641E1 /* ball.cpp */,
 				5545E6E6218E1F3E003641E1 /* stricker.cpp */,
 				5545E6E7218E1F3E003641E1 /* stricker.hpp */,
+				5545E6EB218ECB69003641E1 /* wall.cpp */,
+				5545E6EC218ECB69003641E1 /* wall.hpp */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -803,6 +808,7 @@
 				55FEBCF4218C71BB002349CA /* Timer.cpp in Sources */,
 				5545E6CC218DC85A003641E1 /* gxFile.cpp in Sources */,
 				55CC15762187B4C700236749 /* rigidBody.cpp in Sources */,
+				5545E6ED218ECB69003641E1 /* wall.cpp in Sources */,
 				5545E6E4218E166B003641E1 /* scene.cpp in Sources */,
 				55DF03362188DE47004307F7 /* appEntry.cpp in Sources */,
 				5545E6C9218DC809003641E1 /* geFontManager.cpp in Sources */,

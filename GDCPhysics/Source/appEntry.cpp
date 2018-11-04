@@ -52,7 +52,7 @@ int GDCPhysics::appEntry() {
         return -1;
     }
 
-    Scene gameScene;
+    Scene& gameScene = Scene::GetInstance();
     gameScene.InitScene(window, window_cx, window_cy);
     
     SDL_GL_MakeCurrent(window, context);

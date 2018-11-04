@@ -12,6 +12,11 @@
 #include "../Physics/core/Timer.h"
 #include "../Physics/core/util.h"
 
+Scene& Scene::GetInstance() {
+    static Scene instance;
+    return instance;
+}
+
 Scene::Scene() {
     this->gameState = GAME_STATE_MAX;
     this->playerType = PLAYER_TYPE_MAX;
@@ -22,6 +27,8 @@ Scene::Scene() {
     this->inputMoveUp = false;
     this->remoteInputMoveDown = false;
     this->remoteInputMoveUp = false;
+    this->player1Score = "0";
+    this->player2Score = "0";
 }
 
 Scene::~Scene() {
@@ -144,6 +151,8 @@ void Scene::DrawStats() {
     geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("STATUS : %s", this->statusMsg.c_str()).c_str(), 45, -(60+(iterator++)*20), 200);
     geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("BALL VEL : %d", XTOI(this->ball.GetRBVelocity().lengthx())).c_str(), 45, -(60+(iterator++)*20), 200);
 
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PLAYER 1: %s", player1Score.c_str()).c_str(), windowSize.x*0.09f, -(windowSize.y*0.85f), 200);
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PLAYER 2: %s", player2Score.c_str()).c_str(), windowSize.x*0.82f, -(windowSize.y*0.85f), 200);
     glPopMatrix();
     //
 }
@@ -279,6 +288,13 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                         this->player1.SetPosition(vector2x(px, py));
                     }
                 }
+            } else if (lines[0] == "score" && lines.size()==2) {
+                std::vector<std::string> args;
+                util::splitString(lines[1], args, ',');
+                if (args.size()==2) {
+                    player1Score = args[0];
+                    player2Score = args[1];
+                }
             }
         }
     }
@@ -341,6 +357,11 @@ void Scene::OnGameInit() {
     rightWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(FTOX(windowSize.x-40.0f), 0));
     topWall.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, FTOX(windowSize.y-40.0f)));
     ball.AddForce(vector2x(FTOX(-5000.0f), 0));
+    
+    ground.SetWallType(Wall::BOTTOM);
+    leftWall.SetWallType(Wall::LEFT);
+    rightWall.SetWallType(Wall::RIGHT);
+    topWall.SetWallType(Wall::TOP);
     
     player1.InitBoxCollider(vector2x(ITOX(35), FTOX(windowSize.y*0.25f)), vector2x(ITOX(45), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
     player2.InitBoxCollider(vector2x(ITOX(35), FTOX(windowSize.y*0.25f)), vector2x(FTOX(windowSize.x-80.0f), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));

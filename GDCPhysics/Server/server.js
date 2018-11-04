@@ -5,6 +5,8 @@ class Room {
     this._name = roomname;
     this._pingAknReceivedFromFirst = 0;
     this._pingAknReceivedFromSecond = 0;
+    this._firstScore = 0;
+    this._secondScore = 0;
     console.log("Room created "+this.name);
   }
   // set name(name) {
@@ -71,6 +73,13 @@ class Room {
     console.log("initGame for room "+this.name);
     this._first.send("first");
     this._second.send("second");
+  }
+
+  sendScoreUpdate() {
+    console.log("sendScoreUpdate for room "+this.name);
+    var score_str = "score|"+this._firstScore +","+this._secondScore;
+    this._first.send(score_str);
+    this._second.send(score_str);
   }
 
   stopGame(connection) {
@@ -191,6 +200,9 @@ function messagePass(connection, msg) {
           if (rooms[i]._pingAknReceivedFromSecond) {
             rooms[i].startGame();
           }
+        } else if (msg == "goal") {
+          rooms[i]._secondScore++;
+          rooms[i].sendScoreUpdate();
         } else {
           if (rooms[i].second) {
             rooms[i].second.send(msg);
@@ -202,6 +214,9 @@ function messagePass(connection, msg) {
           if (rooms[i]._pingAknReceivedFromFirst) {
             rooms[i].startGame();
           }
+        } else if (msg == "goal") {
+          rooms[i]._firstScore++;
+          rooms[i].sendScoreUpdate();
         } else {
           if (rooms[i].first) {
             rooms[i].first.send(msg);
