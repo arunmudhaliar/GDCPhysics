@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #include "../Source/appEntry.h"
-
+#include "../Source/Scene/scene.h"
 @interface AppDelegate ()
 
 @property (weak) IBOutlet NSWindow *window;
@@ -27,5 +27,7 @@
     // Insert code here to tear down your application
 }
 
-
+-(IBAction) resetSimulation:(id)sender {
+    Scene::GetInstance().StartGameFromMenu();
+}
 @end

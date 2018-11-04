@@ -48,12 +48,15 @@ void Scene::InitScene(SDL_Window* window, float cx, float cy) {
 
 void Scene::InternalGLStates() {
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-    glShadeModel(GL_FLAT);                          // Enable Smooth Shading
+//    glShadeModel(GL_FLAT);                          // Enable Smooth Shading
     glClearDepth(1.0f);                             // Depth Buffer Setup
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);                             // Enable culling
     glDepthFunc(GL_LEQUAL);                             // The Type Of Depth Testing To Do (GL_LEQUAL is must for shadow fonts)
     glEnable(GL_DEPTH_TEST);                            // Enables Depth Testing
+    
+//    glEnable( GL_LINE_SMOOTH );
+//    glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 }
 
 void Scene::Resize(float cx, float cy) {
@@ -122,12 +125,10 @@ void Scene::Render() {
     
     // render objects here
     ball.draw();
-//    ball2.draw();
     ground.draw();
     leftWall.draw();
     rightWall.draw();
     topWall.draw();
-    
     player1.draw();
     player2.draw();
     //
@@ -207,6 +208,13 @@ void Scene::ApplyBoost() {
     } else {
         vel.normalizex();
         ball.AddForce(vel*ITOX(8000));
+    }
+}
+
+void Scene::StartGameFromMenu() {
+    if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
+        NetworkManager::GetInstance().SendMessage("ping");
+        pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec();
     }
 }
 
@@ -353,8 +361,7 @@ void Scene::OnGameInit() {
     
     // init scene
     physicsSolver.InitSolver();
-    ball.initBall(35.0f, 1.0f, vector2x(FTOX(windowSize.x*0.5f), ITOX(500)));
-    //    ball2.initBall(60.0f, 10.0f, vector2x(ITOX(800), ITOX(600)));
+    ball.initBall(35.0f, 1.0f, vector2x(FTOX(windowSize.x*0.5f), FTOX(windowSize.y*0.75f)));
     ground.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, 0));
     leftWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(0, 0));
     rightWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(FTOX(windowSize.x-40.0f), 0));
@@ -372,7 +379,6 @@ void Scene::OnGameInit() {
     player2.SetWindowHeight(this->windowSize.y);
 
     physicsSolver.AddRigidBody(&ball);
-    //    physicsSolver.AddRigidBody(&ball2);
     physicsSolver.AddBoxCollider(&ground);
     physicsSolver.AddBoxCollider(&leftWall);
     physicsSolver.AddBoxCollider(&rightWall);

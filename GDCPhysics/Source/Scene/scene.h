@@ -38,34 +38,33 @@ public:
     static Scene& GetInstance();
     
     ~Scene();
-    
     void InitScene(SDL_Window* window, float cx, float cy);
     void Resize(float cx, float cy);
     void Update();
     void Render();
     
+    void StartGameFromMenu();
     void MouseBtnUp();
-    
     void MoveStrickerUP(bool keyDown);
     void MoveStrickerDown(bool keyDown);
     
     PLAYER_TYPE GetPlayerType() { return this->playerType; }
     float GetGoalElapsed()  { return this->goalElapsedTime; }
     void ClearGoalElapsed() { this->goalElapsedTime = 0.0f; }
-    
+
 protected:
     vector2f windowSize;
     Ball ball;
-//    Ball ball2;
     Wall ground;
     Wall topWall;
     Wall leftWall;
     Wall rightWall;
-
     Solver physicsSolver;
     
     Stricker player1;
     Stricker player2;
+    
+    void ApplyBoost();
     
     // NetworkManagerDelegate
     void OnNetworkMessage(const std::string& msg) override;
@@ -79,8 +78,6 @@ protected:
     void OnGameStart();
     void OnGameReset();
     
-    void ApplyBoost();
-    
     void DrawStats();
     
 private:
@@ -89,14 +86,13 @@ private:
     PLAYER_TYPE playerType;
     unsigned long pingTimeFromOtherPlayer;
     SDL_Window* window;
-    std::string statusMsg;
-    
+
     bool inputMoveDown;
     bool inputMoveUp;
-    
     bool remoteInputMoveDown;
     bool remoteInputMoveUp;
     std::string player1Score;
     std::string player2Score;
+    std::string statusMsg;
     float goalElapsedTime;
 };

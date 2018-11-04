@@ -11,5 +11,6 @@
 @interface AppDelegate : NSObject <NSApplicationDelegate>
 
 
+-(IBAction) resetSimulation:(id)sender;
 @end
 

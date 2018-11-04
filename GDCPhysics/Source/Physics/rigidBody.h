@@ -20,16 +20,15 @@ public:
     RigidBody();
     virtual ~RigidBody();
     
-    void UpdateRigidBody(intx fixedDT);
     void SetMass(intx mass);
     void SetRadius(intx radius);
     void AddForce(vector2x force);
     void ClearForce();
-    
+    void SimulateStep(intx fixedDT, vector2x& displacement, vector2x& velocity);
+
     void SetRBPosition(const vector2x pos, bool updateTransformImmediate = false);
     void SetRBVelocity(const vector2x& velocity);
     
-    void SimulateStep(intx fixedDT, vector2x& displacement, vector2x& velocity);
     inline vector2x& GetRBPosition()   { return position; }
     inline vector2x& GetRBVelocity()   { return velocity; }
     inline intx GetRBMass() { return mass; }

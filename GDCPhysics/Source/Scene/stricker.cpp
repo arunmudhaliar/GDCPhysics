@@ -45,10 +45,7 @@ void Stricker::OnRender() {
     glColor3f(0.7f, 0.5, 1);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
-    //    glEnableClientState(GL_COLOR_ARRAY);
-    //    glColorPointer(4, GL_FLOAT, 0, vbuffer->m_cszVertexColorList);
     glDrawArrays(GL_LINE_LOOP, 0, 4);
-    //    glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
 }

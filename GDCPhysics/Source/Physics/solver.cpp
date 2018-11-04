@@ -11,9 +11,9 @@
 #include "core/pxMath.h"
 #include "core/Timer.h"
 
-#define FIXED_DT_READABLE    16             // 45 fps
+#define FIXED_DT_READABLE    16             // 60 fps
 #define FIXED_DT_THRESHOLD_READABLE    40   // 25 fps
-#define FIXED_DT    FTOX(0.016f)            // 45 fps
+#define FIXED_DT    FTOX(0.016f)            // 60 fps
 #define GRAVITY -ITOX(100)
 
 Solver::Solver() {
@@ -61,14 +61,11 @@ void Solver::UpdateSolver() {
     this->currentTime = newTime;
     this->accumulator += frameTime;
     
-//    printf("frameTime %d, accumulator %d\n", frameTime, accumulator);
     while ( this->accumulator >= FIXED_DT_READABLE ) {
         UpdatePhysics(FTOX(this->elapsedTime/1000.0f), FIXED_DT);
         this->elapsedTime += FIXED_DT_READABLE;
         this->accumulator -= FIXED_DT_READABLE;
     }
-    
-//    UpdatePhysics(FTOX(this->elapsedTime/1000.0f), FIXED_DT);
 }
 
 void Solver::UpdatePhysics(intx t, intx fixedDT) {
@@ -147,31 +144,27 @@ void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, boo
             closestPt[3]=(util::closestPointOnLine(newPos, topLeft, bottomLeft));
 
             // check for penetration
+            // Note: we are not checking penitration for now.
             bPenitration = false;
             
             //which one is the closest
             __int64_t closest_length=GX_MAX_INT;
             int closest_index=-1;
             
-            for (int l=0; l<4; l++)
-            {
+            for (int l=0; l<4; l++) {
                 vector2x diff(newPos-closestPt[l]);
                 __int64_t length=diff.lengthSquaredx();
-                if(length<closest_length)
-                {
+                if(length<closest_length) {
                     closest_length=length;
                     closest_index=l;
                     
-                    if(bPenitration)
-                    {
+                    if(bPenitration) {
                         diff=-diff;
                     }
                     
-                    if(closest_length <= radiusSq)
-                    {
+                    if(closest_length <= radiusSq) {
                         //collision occured
                         diff.normalizex();
-    //                    float val=(ACTOR_COLLISION_RADIUS*m_pCommonDataPtr->getPortingMultiplier())+0.1f;
                         intx radius = pxMath::SQRT((__int64_t)radiusSq);
                         auto contactPt = closestPt[closest_index];
                         vector2x calc_Pos(contactPt + diff*radius);
@@ -180,164 +173,22 @@ void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, boo
                         cnt++;
                         colliders.push_back(boxCollider);
                         boxCollider->CollidedWithRB(rb, contactPt, diff);
-                        //DEBUG_PRINT("(%d), closestPt(%f, %f), calc_pos(%f, %f)", l, closestPtf[closest_index].x, closestPtf[closest_index].y, calc_Pos.x, calc_Pos.y);
                     }
                 }
             }//for
             //~circle-rectangle collision
         }
         
-        if(cnt)
-        {
+        if(cnt) {
             avgPos.x=DIVX(avgPos.x,ITOX(cnt));
             avgPos.y=DIVX(avgPos.y,ITOX(cnt));
-            
             // normali
             avgNrml.normalizex();
             contactNormal = avgNrml;
-            
             newPos=avgPos;    //this will cause the actor to come to a halt then move away, so i commented this line
             collisionHappened = true;
-    //        bPositionUpdated=true;
-            //            bCollisionOccuredDuringThisUpdate=true;
-            //DEBUG_PRINT("collision occured %d, avgPos(%f, %f)", cnt, avgPosf.x, avgPosf.x);
-        }
-        else
-        {
+        } else {
             break;  //break the loop
         }
     }
-}
-
-void CheckCollisionsTest() {
-#if 0
-    int collision_check_cntr=5;
-    //bool bCollision=true;
-    while(collision_check_cntr--)
-    {
-        oldPos=newPos;
-        //DEBUG_PRINT("newPos(%f, %f)", newPosf.x, newPosf.y);
-        vector2x avgPos;
-        int cnt=0;
-        
-        int row0=iamontile->getTileID()/getMapPtr()->getCol();
-        int col0=iamontile->getTileID()%getMapPtr()->getCol();
-        int min_row=row0-1;
-        int min_col=col0-1;
-        int max_row=row0+1;
-        int max_col=col0+1;
-        
-        min_row=(min_row<0)?0:min_row;
-        min_col=(min_col<0)?0:min_col;
-        max_row=(max_row>=getMapPtr()->getRow())?getMapPtr()->getRow()-1:max_row;
-        max_col=(max_col>=getMapPtr()->getCol())?getMapPtr()->getCol()-1:max_col;
-        
-        for (int y = min_row; y <= max_row; y++)
-        {
-            for (int x = min_col; x <= max_col; x++)
-            {
-                ECTile* tile=getMapPtr()->getTile(y*getMapPtr()->getCol()+x);
-                if(tile->isWalkable()) continue;
-                CircleCollider* collider=tile->getCircleCollider();
-                if(!collider)
-                {
-                    //circle-rectangle collision
-                    vector2x left(tile->getLeftWorld());
-                    vector2x right(tile->getRightWorld());
-                    vector2x top(tile->getTopWorld());
-                    vector2x bottom(tile->getBottomWorld());
-                    
-                    //check for penitration
-                    bool bPenitration=true;
-                    if(newPos.x<left.x || newPos.y<top.y || newPos.x>right.x || newPos.y>bottom.y)
-                        bPenitration=false;
-                    
-                    //                    if(bPenitration)
-                    //                    {
-                    //                        DEBUG_PRINT("=======================PENITRATION OCCURED=================");
-                    //                    }
-                    
-                    vector2x closestPt[4];
-                    
-                    closestPt[0]=(util::closestPointOnLine(newPos, left, top));
-                    closestPt[1]=(util::closestPointOnLine(newPos, top, right));
-                    closestPt[2]=(util::closestPointOnLine(newPos, right, bottom));
-                    closestPt[3]=(util::closestPointOnLine(newPos, bottom, left));
-                    
-                    //for debug
-                    //                    tile->debug_closestPtf[0].set(XTOF(closestPt[0].x), XTOF(closestPt[0].y));
-                    //                    tile->debug_closestPtf[1].set(XTOF(closestPt[1].x), XTOF(closestPt[1].y));
-                    //                    tile->debug_closestPtf[2].set(XTOF(closestPt[2].x), XTOF(closestPt[2].y));
-                    //                    tile->debug_closestPtf[3].set(XTOF(closestPt[3].x), XTOF(closestPt[3].y));
-                    //
-                    
-                    //which one is the closest
-                    int closest_length=GX_MAX_INT;
-                    int closest_index=-1;
-                    
-                    for (int l=0; l<4; l++)
-                    {
-                        vector2x diff(newPos-closestPt[l]);
-                        __int64_t length=diff.lengthSquaredx();
-                        if(length<closest_length)
-                        {
-                            closest_length=length;
-                            closest_index=l;
-                            
-                            if(bPenitration)
-                            {
-                                diff=-diff;
-                            }
-                            
-                            if(closest_length<=m_xActorRadiusSq)
-                            {
-                                //collision occured
-                                diff.normalizex();
-                                float val=(ACTOR_COLLISION_RADIUS*m_pCommonDataPtr->getPortingMultiplier())+0.1f;
-                                vector2x calc_Pos(closestPt[closest_index] + (diff*val));
-                                avgPos+=calc_Pos;
-                                cnt++;
-                                //DEBUG_PRINT("(%d), closestPt(%f, %f), calc_pos(%f, %f)", l, closestPtf[closest_index].x, closestPtf[closest_index].y, calc_Pos.x, calc_Pos.y);
-                            }
-                        }
-                    }//for
-                    //~circle-rectangle collision
-                }
-                else
-                {
-                    vector2x center(tile->getCenterWorldx());
-                    vector2x cpos(center.x+ITOX(collider->getOffsetX()), center.y+ITOX(collider->getOffsetY()));
-                    
-                    vector2x diff(newPos-cpos);
-                    __int64_t length=diff.lengthSquaredx();
-                    int check_val=(ACTOR_COLLISION_RADIUS*m_pCommonDataPtr->getPortingMultiplier())+collider->getRadius();
-                    if(length<=ITOX((check_val*check_val)))
-                    {
-                        diff.normalizex();
-                        float val=(ACTOR_COLLISION_RADIUS*m_pCommonDataPtr->getPortingMultiplier())+collider->getRadius()+0.1f;
-                        vector2x calc_Pos(cpos + diff*val);
-                        avgPos+=calc_Pos;
-                        cnt++;
-                    }
-                }
-            }
-        }
-        //for entire map
-        
-        if(cnt)
-        {
-            avgPos.x=DIVX(avgPos.x,ITOX(cnt));
-            avgPos.y=DIVX(avgPos.y,ITOX(cnt));
-            
-            newPos=avgPos;    //this will cause the actor to come to a halt then move away, so i commented this line
-            bPositionUpdated=true;
-            //            bCollisionOccuredDuringThisUpdate=true;
-            //DEBUG_PRINT("collision occured %d, avgPos(%f, %f)", cnt, avgPosf.x, avgPosf.x);
-        }
-        else
-        {
-            break;  //break the loop
-        }
-    }//while
-#endif
 }

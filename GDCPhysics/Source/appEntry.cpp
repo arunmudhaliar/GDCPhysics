@@ -1,12 +1,6 @@
 #include "appEntry.h"
-#include <iostream>
-
 #include "Scene/scene.h"
-
-bool g_mControlKeyPressed = false;
-bool g_mAppInitialised = false;
-bool g_mReInitMono = false;
-//int handleAppEvents(void *userdata, SDL_Event *event);
+#include <iostream>
 
 int GDCPhysics::appEntry() {
     // init SDL
@@ -15,20 +9,15 @@ int GDCPhysics::appEntry() {
         return -1;
     }
 
-//    SDL_SetEventFilter(handleAppEvents, NULL);
-
     // create a window
     SDL_Window * window = SDL_CreateWindow(
                                            "GDCPhysics",             // window title
                                            SDL_WINDOWPOS_CENTERED,     // x position, centered
                                            SDL_WINDOWPOS_CENTERED,     // y position, centered
-                                           800,                        // width, in pixels
-                                           600,                        // height, in pixels
-                                           SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN  | SDL_WINDOW_RESIZABLE  /*|  SDL_WINDOW_ALLOW_HIGHDPI */   // flags
+                                           640,                        // width, in pixels
+                                           480,                        // height, in pixels
+                                           SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN  /*| SDL_WINDOW_RESIZABLE  |  SDL_WINDOW_ALLOW_HIGHDPI */   // flags
                                            );
-	
-    // SDL_MaximizeWindow(window);
-
     int window_cx=1;
     int window_cy=1;
     SDL_GetWindowSize(window, &window_cx, &window_cy);
@@ -52,10 +41,11 @@ int GDCPhysics::appEntry() {
         return -1;
     }
 
+    SDL_GL_MakeCurrent(window, context);
+    
     Scene& gameScene = Scene::GetInstance();
     gameScene.InitScene(window, window_cx, window_cy);
     
-    SDL_GL_MakeCurrent(window, context);
     bool quit=false;
     //While application is running
     while( !quit ) {
@@ -89,50 +79,6 @@ int GDCPhysics::appEntry() {
     return 0;
 }
 
-/*
-int handleAppEvents(void *userdata, SDL_Event *event)
-{
-    switch (event->type)
-    {
-        case SDL_APP_TERMINATING:
-//            Terminate the app.
-//            Shut everything down before returning from this function.
-            printf("SDL_APP_TERMINATING");
-            return 0;
-        case SDL_APP_LOWMEMORY:
-//            You will get this when your app is paused and iOS wants more memory.
-//            Release as much memory as possible.
-            printf("SDL_APP_LOWMEMORY");
-            return 0;
-        case SDL_APP_WILLENTERBACKGROUND:
-//            Prepare your app to go into the background.  Stop loops, etc.
-//            This gets called when the user hits the home button, or gets a call.
-            printf("SDL_APP_WILLENTERBACKGROUND");
-            return 0;
-        case SDL_APP_DIDENTERBACKGROUND:
-//            This will get called if the user accepted whatever sent your app to the background.
-//            If the user got a phone call and canceled it, you'll instead get an    SDL_APP_DIDENTERFOREGROUND event and restart your loops.
-//            When you get this, you have 5 seconds to save all your state or the app will be terminated.
-//            Your app is NOT active at this point.
-            printf("SDL_APP_DIDENTERBACKGROUND");
-            return 0;
-        case SDL_APP_WILLENTERFOREGROUND:
-//            This call happens when your app is coming back to the foreground.
-//            Restore all your state here.
-            printf("SDL_APP_WILLENTERFOREGROUND");
-            return 0;
-        case SDL_APP_DIDENTERFOREGROUND:
-//            Restart your loops here.
-//            Your app is interactive and getting CPU again.
-            printf("SDL_APP_DIDENTERFOREGROUND");
-            return 0;
-        default:
-//            No special processing, add it to the event queue
-            return 1;
-    }
-}
-*/
-
 void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userData) {
     Scene* scene = static_cast<Scene*>(userData);
     
@@ -144,8 +90,7 @@ void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userDa
             case SDL_WINDOWEVENT_MAXIMIZED:
             case SDL_WINDOWEVENT_MINIMIZED:
             case SDL_WINDOWEVENT_RESTORED:
-            case SDL_WINDOWEVENT_SIZE_CHANGED:
-            {
+            case SDL_WINDOWEVENT_SIZE_CHANGED: {
                 int window_cx=1;
                 int window_cy=1;
                 SDL_GetWindowSize(window, &window_cx, &window_cy);
@@ -154,42 +99,21 @@ void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userDa
             }
                 break;
             
-            case SDL_WINDOWEVENT_FOCUS_LOST:
-            {
+            case SDL_WINDOWEVENT_FOCUS_LOST: {
                 printf("SDL_WINDOWEVENT_FOCUS_LOST\n");
-                if(g_mAppInitialised)
-                {
-//                    if(!monoWrapper::mono_isSimulationRunning())
-//                    {
-//                        EditorGEARApp::saveSceneToTempFolder();
-//                    }
-                }
             }
                 break;
-            case SDL_WINDOWEVENT_FOCUS_GAINED:
-            {
+            case SDL_WINDOWEVENT_FOCUS_GAINED: {
                 printf("SDL_WINDOWEVENT_FOCUS_GAINED\n");
-
-                if(g_mAppInitialised)
-                {
-                    g_mReInitMono = true;
-                    printf("ReInit mono after one loop\n");
-                }
-                else
-                {
-                    g_mAppInitialised = true;
-                }
             }
                 break;
                 
-            case SDL_WINDOWEVENT_SHOWN:
-            {
+            case SDL_WINDOWEVENT_SHOWN: {
                 printf("SDL_WINDOWEVENT_SHOWN\n");
             }
                 break;
 
-            case SDL_WINDOWEVENT_EXPOSED:
-            {
+            case SDL_WINDOWEVENT_EXPOSED: {
                 printf("SDL_WINDOWEVENT_EXPOSED\n");
             }
                 break;
@@ -197,137 +121,75 @@ void GDCPhysics::processSDLEvent(SDL_Window * window, SDL_Event& e, void* userDa
             default:
                 break;
         }
-    }
-    else if(e.type==SDL_KEYDOWN)
-    {
+    } else if(e.type==SDL_KEYDOWN) {
         SDL_KeyboardEvent* keyBoardEvent = (SDL_KeyboardEvent*)&e;
-        //const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-		g_mControlKeyPressed = (keyBoardEvent->keysym.scancode == SDL_SCANCODE_LCTRL) || (keyBoardEvent->keysym.scancode == SDL_SCANCODE_RCTRL);
         if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_UP) {
             scene->MoveStrickerUP(true);
         }
         if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_DOWN) {
             scene->MoveStrickerDown(true);
         }
-    }
-    else if(e.type==SDL_KEYUP)
-    {
+    } else if(e.type==SDL_KEYUP) {
         SDL_KeyboardEvent* keyBoardEvent = (SDL_KeyboardEvent*)&e;
-        //const Uint8 *keystate = SDL_GetKeyboardState(NULL);
-        if(g_mControlKeyPressed)
-        {
-            if((keyBoardEvent->keysym.scancode == SDL_SCANCODE_LCTRL) || (keyBoardEvent->keysym.scancode == SDL_SCANCODE_RCTRL))
-                g_mControlKeyPressed = false;
-        }
-        
         if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_UP) {
             scene->MoveStrickerUP(false);
         }
         if (keyBoardEvent->keysym.scancode == SDL_SCANCODE_DOWN) {
             scene->MoveStrickerDown(false);
         }
-    }
-    else if(e.type==SDL_MOUSEBUTTONDOWN)
-    {
+    } else if(e.type==SDL_MOUSEBUTTONDOWN) {
         int mouse_x = 0, mouse_y = 0;
         SDL_GetMouseState( &mouse_x, &mouse_y );
 
         SDL_MouseButtonEvent* mouseBtnEvent = (SDL_MouseButtonEvent*)&e;
         switch (mouseBtnEvent->button) {
-            case SDL_BUTTON_LEFT:
-            {
-//                //DEBUG_PRINT("Left Mouse Down");
-//                geTextBox::g_pCurrentlyActiveTextBoxPtr=NULL;
-//                editorApp.MouseLButtonDown(mouse_x, mouse_y, MK_LBUTTON | ((g_mControlKeyPressed)?MK_CONTROL:0));
+            case SDL_BUTTON_LEFT: {
             }
                 break;
-            case SDL_BUTTON_MIDDLE:
-            {
-//                //DEBUG_PRINT("Middle Mouse Down");
-//                editorApp.MouseMButtonDown(mouse_x, mouse_y, MK_MBUTTON);
+            case SDL_BUTTON_MIDDLE: {
             }
                 break;
-            case SDL_BUTTON_RIGHT:
-            {
-//                //DEBUG_PRINT("Right Mouse Down");
-//                editorApp.MouseRButtonDown(mouse_x, mouse_y, MK_RBUTTON);
+            case SDL_BUTTON_RIGHT: {
             }
                 break;
             default:
                 break;
         }
-    }
-    else if(e.type==SDL_MOUSEBUTTONUP)
-    {
+    } else if(e.type==SDL_MOUSEBUTTONUP) {
         int mouse_x = 0, mouse_y = 0;
         SDL_GetMouseState( &mouse_x, &mouse_y );
 
         SDL_MouseButtonEvent* mouseBtnEvent = (SDL_MouseButtonEvent*)&e;
         switch (mouseBtnEvent->button) {
-            case SDL_BUTTON_LEFT:
-            {
-//                //DEBUG_PRINT("Left Mouse Up");
-//                //geTextBox::g_pCurrentlyActiveTextBoxPtr=NULL;
-//                editorApp.MouseLButtonUp(mouse_x, mouse_y, MK_LBUTTON | ((g_mControlKeyPressed) ? MK_CONTROL : 0));
+            case SDL_BUTTON_LEFT: {
                 scene->MouseBtnUp();
             }
                 break;
-            case SDL_BUTTON_MIDDLE:
-            {
-//                //DEBUG_PRINT("Middle Mouse Up");
-//                editorApp.MouseMButtonUp(mouse_x, mouse_y, MK_MBUTTON);
+            case SDL_BUTTON_MIDDLE: {
             }
                 break;
-            case SDL_BUTTON_RIGHT:
-            {
-//                //DEBUG_PRINT("Right Mouse Up");
-//                editorApp.MouseRButtonUp(mouse_x, mouse_y, MK_RBUTTON);
+            case SDL_BUTTON_RIGHT: {
             }
                 break;
             default:
                 break;
         }
-    }
-    else if(e.type==SDL_MOUSEMOTION)
-    {
+    } else if(e.type==SDL_MOUSEMOTION) {
         int mouse_x = 0, mouse_y = 0;
         SDL_GetMouseState( &mouse_x, &mouse_y );
-
-        //DEBUG_PRINT("m_x=%d, m_y%d", mouse_x, mouse_y);
         SDL_MouseMotionEvent* mouseMotionEvent = (SDL_MouseMotionEvent*)&e;
         switch (mouseMotionEvent->state) {
             case 1:
-//                editorApp.MouseMove(mouseMotionEvent->x, mouseMotionEvent->y, MK_LBUTTON | ((g_mControlKeyPressed) ? MK_CONTROL : 0));
                 break;
             case 2:
-//                editorApp.MouseMove(mouseMotionEvent->x, mouseMotionEvent->y, MK_MBUTTON | ((g_mControlKeyPressed) ? MK_CONTROL : 0));
                 break;
             case 4:
-//                editorApp.MouseMove(mouseMotionEvent->x, mouseMotionEvent->y, MK_RBUTTON | ((g_mControlKeyPressed) ? MK_CONTROL : 0));
                 break;
 
             default:
-//                editorApp.MouseMove(mouseMotionEvent->x, mouseMotionEvent->y, 0);
                 break;
         }
-    }
-    else if(e.type==SDL_MOUSEWHEEL)
-    {
-//        int mouse_x = 0, mouse_y = 0;
-//        SDL_GetMouseState( &mouse_x, &mouse_y );
-//
-//        int nFlags = (g_mControlKeyPressed) ? MK_CONTROL : 0;
-//        SDL_MouseWheelEvent* mouseWheelEvent = (SDL_MouseWheelEvent*)&e;
-//        editorApp.MouseWheel(mouseWheelEvent->y, mouse_x, mouse_y, nFlags);
-    }
-    else if (e.type==SDL_DROPFILE)
-    {
-//        int mouse_x = 0, mouse_y = 0;
-//        SDL_GetMouseState( &mouse_x, &mouse_y );
-//        SDL_DropEvent* dropEvent = (SDL_DropEvent*)&e;
-//        MDropData* dropData = (MDropData*)dropEvent->file;
-//        editorApp.DragDrop(mouse_x, mouse_y, dropData);
-//        GE_DELETE(dropData);
-//        //SDL_FlushEvent(SDL_MOUSEMOTION);  //FlushEvent is called inside geGUIBase.
+    } else if(e.type==SDL_MOUSEWHEEL) {
+    } else if (e.type==SDL_DROPFILE) {
     }
 }

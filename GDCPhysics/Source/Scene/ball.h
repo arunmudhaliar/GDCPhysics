@@ -11,6 +11,8 @@
 #include "rigidBody.h"
 #include "renderObject.h"
 
+#define SEGMENTS    36
+
 class Ball : public RenderObject, public RigidBody {
 public:
     Ball();
@@ -20,7 +22,7 @@ public:
     void SendBallState();
     
 protected:
-    float vertexBuffer[36*2];
+    float vertexBuffer[SEGMENTS*2];
     float size;
     virtual void OnRender();
     

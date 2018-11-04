@@ -279,13 +279,13 @@
 		55CC15632187A92500236749 /* Physics */ = {
 			isa = PBXGroup;
 			children = (
+				55DF03372188EE06004307F7 /* renderObject.h */,
+				55CC15752187B4C700236749 /* rigidBody.cpp */,
+				55CC15742187B4C700236749 /* rigidBody.h */,
 				556419F4218B5C33004C81D3 /* solver.cpp */,
 				556419EF218B5C33004C81D3 /* solver.hpp */,
 				55DF03382188FDE4004307F7 /* colliders */,
-				55CC15752187B4C700236749 /* rigidBody.cpp */,
-				55CC15742187B4C700236749 /* rigidBody.h */,
 				55CC156A2187B33A00236749 /* core */,
-				55DF03372188EE06004307F7 /* renderObject.h */,
 			);
 			path = Physics;
 			sourceTree = "<group>";
@@ -379,7 +379,6 @@
 				5545E6C6218DC809003641E1 /* GUI */,
 				55FEBD6B218C8D53002349CA /* Connection */,
 				55FEBCF5218C8CAC002349CA /* websocketpp */,
-				55FEBCEC218C4DBD002349CA /* Misc */,
 				55CC15632187A92500236749 /* Physics */,
 				55D2A87A2187A27700D32E4D /* appEntry.cpp */,
 				55D2A87B2187A27700D32E4D /* appEntry.h */,
@@ -394,13 +393,6 @@
 				55DF033A2188FE0B004307F7 /* boxCollider.hpp */,
 			);
 			path = colliders;
-			sourceTree = "<group>";
-		};
-		55FEBCEC218C4DBD002349CA /* Misc */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Misc;
 			sourceTree = "<group>";
 		};
 		55FEBCF5218C8CAC002349CA /* websocketpp */ = {
