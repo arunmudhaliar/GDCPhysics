@@ -67,16 +67,19 @@ namespace Photon.Pun.Demo.PunBasics
 				{
 				    Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
 
-					// we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-					PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f,5f,0f), Quaternion.identity, 0);
+                    // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
+                    if (PhotonNetwork.IsMasterClient) {
+                        GameObject masterPlayer = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(-6.0f, 0f, 0f), Quaternion.identity, 0);
+                        masterPlayer.name = "masterPlayer";
+                    } else {
+                        GameObject clientPlayer = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(6f, 0f, 0f), Quaternion.identity, 0);
+                        clientPlayer.name = "clientPlayer";
+                    }
 				}else{
 
 					Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
 				}
-
-
 			}
-
 		}
 
 		/// <summary>
