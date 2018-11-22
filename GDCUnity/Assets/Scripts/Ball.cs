@@ -7,6 +7,8 @@ public class Ball : MonoBehaviourPunCallbacks, IPunObservable {
     [Tooltip("The local ball instance. Use this to know if the local ball is represented in the Scene")]
     public static GameObject localBall;
 
+    Vector3 initPos = Vector3.zero;
+
     public void Awake() {
         // #Important
         // used in GameManager.cs: we keep track of the localPlayer instance to prevent instanciation when levels are synchronized
@@ -22,7 +24,20 @@ public class Ball : MonoBehaviourPunCallbacks, IPunObservable {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info ) {
+	public void Start() {
+        initPos = transform.position;	
+	}
+
+	public void Update() {
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        if (photonView.IsMine) {
+            if (rb.velocity.magnitude<=0.001f) {
+                transform.SetPositionAndRotation(initPos, Quaternion.identity);
+            }
+        }	
+	}
+
+	public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info ) {
         if (stream.IsWriting) {
             // We own this player: send the others our data
             //stream.SendNext(this.IsFiring);
