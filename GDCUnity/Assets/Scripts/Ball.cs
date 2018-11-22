@@ -15,7 +15,8 @@ public class Ball : MonoBehaviourPunCallbacks, IPunObservable {
         if (photonView.IsMine) {
             localBall = gameObject;
         } else {
-            GetComponent<Rigidbody2D>().isKinematic = true;
+            //GetComponent<Rigidbody2D>().isKinematic = true;
+            GetComponent<Rigidbody2D>().simulated = false;
             GetComponent<CircleCollider2D>().isTrigger = true;
         }
 
