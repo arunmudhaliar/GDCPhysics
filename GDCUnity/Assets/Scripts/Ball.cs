@@ -12,6 +12,9 @@ public class Ball : MonoBehaviourPunCallbacks, IPunObservable {
         // used in GameManager.cs: we keep track of the localPlayer instance to prevent instanciation when levels are synchronized
         if (photonView.IsMine) {
             localBall = gameObject;
+        } else {
+            GetComponent<Rigidbody2D>().isKinematic = true;
+            GetComponent<BoxCollider2D>().isTrigger = true;
         }
 
         // #Critical
