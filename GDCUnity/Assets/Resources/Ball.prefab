@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 50915680087033374}
   - component: {fileID: 114080551797929240}
   - component: {fileID: 114221309692217808}
-  - component: {fileID: 114367979096595062}
+  - component: {fileID: 114838493293365298}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Untagged
@@ -97,7 +97,7 @@ MonoBehaviour:
   Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 114367979096595062}
+  - {fileID: 114838493293365298}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81053892da36140aca83f6c4e4751566, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114367979096595062
+--- !u!114 &114838493293365298
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,13 +120,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1167280816879286}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e7cb724808c322458aa4d15f5035fa9, type: 3}
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
-  m_TeleportEnabled: 0
-  m_TeleportIfDistanceGreaterThan: 3
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
 --- !u!212 &212987070556035870
 SpriteRenderer:
   m_ObjectHideFlags: 1
