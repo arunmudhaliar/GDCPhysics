@@ -12,6 +12,10 @@ public class GameScene : MonoBehaviour {
     [SerializeField]
     private GameObject playerPrefab;
 
+    [Tooltip("The prefab to use for representing the ball")]
+    [SerializeField]
+    private GameObject ballPrefab;
+
     private void OnGUI()
     {
         if (PhotonNetwork.CurrentRoom != null)
@@ -41,7 +45,19 @@ public class GameScene : MonoBehaviour {
             Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
 
             // we're in a room. spawn a character for the local player. it gets synced by using PhotonNetwork.Instantiate
-            PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+            if (PhotonNetwork.IsMasterClient) {
+                GameObject masterPlayer = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(-6.0f, 0f, 0f), Quaternion.identity, 0);
+                masterPlayer.name = "masterPlayer";
+                GameObject masterBall = PhotonNetwork.Instantiate(this.ballPrefab.name, new Vector3(-4.0f, 0f, 0f), Quaternion.identity, 0);
+                masterBall.name = "masterBall";
+                masterPlayer.GetComponent<Player>().myBall = masterBall;
+            } else {
+                GameObject clientPlayer = PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(6f, 0f, 0f), Quaternion.identity, 0);
+                clientPlayer.name = "clientPlayer";
+                GameObject clientBall = PhotonNetwork.Instantiate(this.ballPrefab.name, new Vector3(4.0f, 0f, 0f), Quaternion.identity, 0);
+                clientBall.name = "clientBall";
+                clientPlayer.GetComponent<Player>().myBall = clientBall;
+            }
         }
     }
 }
