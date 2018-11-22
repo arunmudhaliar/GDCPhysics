@@ -16,7 +16,7 @@ public class Ball : MonoBehaviourPunCallbacks, IPunObservable {
             localBall = gameObject;
         } else {
             GetComponent<Rigidbody2D>().isKinematic = true;
-            GetComponent<BoxCollider2D>().isTrigger = true;
+            GetComponent<CircleCollider2D>().isTrigger = true;
         }
 
         // #Critical
