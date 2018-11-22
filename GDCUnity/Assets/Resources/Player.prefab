@@ -21,8 +21,9 @@ GameObject:
   - component: {fileID: 4984822102740624}
   - component: {fileID: 212542474388139002}
   - component: {fileID: 114251264271892162}
-  - component: {fileID: 114219552801640860}
   - component: {fileID: 61326684290309402}
+  - component: {fileID: 114219552801640860}
+  - component: {fileID: 114660947749436116}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -82,10 +83,10 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 0
+  Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 0}
+  - {fileID: 114660947749436116}
   viewIdField: 0
   InstantiationId: 1
   isRuntimeInstantiated: 0
@@ -101,6 +102,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myBall: {fileID: 0}
+--- !u!114 &114660947749436116
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1812511639392620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
 --- !u!212 &212542474388139002
 SpriteRenderer:
   m_ObjectHideFlags: 1
