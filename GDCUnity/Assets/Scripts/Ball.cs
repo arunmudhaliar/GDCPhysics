@@ -26,17 +26,27 @@ public class Ball : MonoBehaviourPunCallbacks, IPunObservable {
     }
 
 	public void Start() {
-        initPos = transform.position;	
+        initPos = transform.position;
+        if (photonView.IsMine) {
+            Reset();
+        }
 	}
 
 	public void Update() {
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
         if (photonView.IsMine) {
             if (rb.velocity.magnitude<=0.001f) {
-                transform.SetPositionAndRotation(initPos, Quaternion.identity);
+                Reset();
             }
         }	
 	}
+
+    void Reset() {
+        if (photonView.IsMine) {
+            transform.SetPositionAndRotation(initPos, Quaternion.identity);
+            GetComponent<Rigidbody2D>().AddForce(Vector2.up * -2.0f + Vector2.left * 10.0f, ForceMode2D.Impulse);
+        }
+    }
 
 	public void OnPhotonSerializeView( PhotonStream stream, PhotonMessageInfo info ) {
         if (stream.IsWriting) {

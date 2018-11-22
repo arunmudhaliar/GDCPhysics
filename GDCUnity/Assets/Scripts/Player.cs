@@ -23,6 +23,27 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
         DontDestroyOnLoad(gameObject);
     }
 
+    void Update() {
+        if (photonView.IsMine) {
+            float speed = 10.0f;
+            if (Input.GetKey(KeyCode.UpArrow)) {
+                if (transform.position.y < 3.0f) {
+                    transform.position += Vector3.up * speed * Time.deltaTime;
+                } else {
+                    transform.position = new Vector3(transform.position.x, 3.0f, 0.0f);
+                }
+            }
+            if (Input.GetKey(KeyCode.DownArrow)) {
+                transform.position += Vector3.up * -speed * Time.deltaTime;
+                if (transform.position.y > -3.0f) {
+                    transform.position += Vector3.up * -speed * Time.deltaTime;
+                } else {
+                    transform.position = new Vector3(transform.position.x, -3.0f, 0.0f);
+                }
+            }
+        }
+    }
+
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.IsWriting)
@@ -36,6 +57,17 @@ public class Player : MonoBehaviourPunCallbacks, IPunObservable
             // Network player, receive data
             //this.IsFiring = (bool)stream.ReceiveNext();
             //this.Health = (float)stream.ReceiveNext();
+        }
+    }
+
+    void OnCollisionEnter2D( Collision2D collision ) {
+        //Debug.Log("Collided "+ collision.gameObject.tag);
+        if (collision.gameObject.tag == "ball" && photonView.IsMine) {
+            if (collision.contacts.Length>0) {
+                Vector2 collisionNormal = Vector2.zero;
+                collisionNormal = -collision.contacts[0].normal;
+                collision.rigidbody.AddForce(collisionNormal * 6.0f, ForceMode2D.Impulse);
+            }
         }
     }
 }
