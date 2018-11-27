@@ -20,6 +20,9 @@ public class Ball : MonoBehaviourPunCallbacks, IPunObservable {
             GetComponent<CircleCollider2D>().isTrigger = true;
         }
 
+        if (PhotonNetwork.IsMasterClient && photonView.IsMine) {
+            GetComponent<SpriteRenderer>().color = Color.red;
+        }
         // #Critical
         // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
         DontDestroyOnLoad(gameObject);
