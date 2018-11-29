@@ -35,10 +35,10 @@ void Wall::OnCollidedWithRB(RigidBody* rb, const vector2x& contactPt, const vect
 void Wall::OnRender() {
     glPushMatrix();
     glTranslatef(XTOF(this->position.x), XTOF(this->position.y), 0);
-    glColor3f(0.6f, 0.6f, 0.6f);
+    glColor3f(0.3f, 0.3f, 0.3f);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
-    glDrawArrays(GL_LINE_LOOP, 0, 4);
+    glDrawArrays(GL_QUADS, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
 }

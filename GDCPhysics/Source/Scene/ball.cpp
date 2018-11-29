@@ -25,12 +25,15 @@ void Ball::initBall(float size, float mass, const vector2x& pos) {
     SetRadius(FTOX(size));
     SetMass(FTOX(mass));
     int delta = (360/SEGMENTS);
-    for(int xx=SEGMENTS-1; xx>=0; xx--) {
+    vertexBuffer[0]=vertexBuffer[1] = 0.0f;
+    for(int xx=0; xx<SEGMENTS; xx++) {
         float cs=size*cos(DEG2RAD((float)xx*delta));
         float sn=size*sin(DEG2RAD((float)xx*delta));
-        vertexBuffer[xx*2+0]=cs;
-        vertexBuffer[xx*2+1]=sn;
+        vertexBuffer[(xx+1)*2+0]=cs;
+        vertexBuffer[(xx+1)*2+1]=sn;
     }
+    vertexBuffer[SEGMENTS*2+0]=vertexBuffer[(1)*2+0];
+    vertexBuffer[SEGMENTS*2+1]=vertexBuffer[(1)*2+1];
     SetRBPosition(pos, true);
 }
 
@@ -38,10 +41,10 @@ void Ball::OnRender() {
     auto p = getOpenGLMatrix();
     glPushMatrix();
     glTranslatef(XTOF(p[12]), XTOF(p[13]), XTOF(p[14]));
-    glColor3f(1, 0, 0.2f);
+    glColor3f(0.75f, 0, 0.2f);
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
-    glDrawArrays(GL_LINE_LOOP, 0, SEGMENTS);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, SEGMENTS+2);
     glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
 }

@@ -22,7 +22,7 @@ public:
     void SendBallState();
     
 protected:
-    float vertexBuffer[SEGMENTS*2];
+    float vertexBuffer[(SEGMENTS+2)*2];
     float size;
     virtual void OnRender();
     

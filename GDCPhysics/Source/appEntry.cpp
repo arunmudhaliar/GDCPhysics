@@ -11,7 +11,7 @@ int GDCPhysics::appEntry() {
 
     // create a window
     SDL_Window * window = SDL_CreateWindow(
-                                           "GDCPhysics",             // window title
+                                           "PingPong",             // window title
                                            SDL_WINDOWPOS_CENTERED,     // x position, centered
                                            SDL_WINDOWPOS_CENTERED,     // y position, centered
                                            640,                        // width, in pixels
