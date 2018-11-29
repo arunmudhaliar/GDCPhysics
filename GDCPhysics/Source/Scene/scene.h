@@ -80,11 +80,14 @@ protected:
     
     void DrawStats();
     
+    void SendPing();
+    
 private:
     void InternalGLStates();
     GAME_STATE gameState;
     PLAYER_TYPE playerType;
     unsigned long pingTimeFromOtherPlayer;
+    unsigned long pingStartTime;
     SDL_Window* window;
 
     bool inputMoveDown;
@@ -95,4 +98,5 @@ private:
     std::string player2Score;
     std::string statusMsg;
     float goalElapsedTime;
+    float pingElapsed;
 };

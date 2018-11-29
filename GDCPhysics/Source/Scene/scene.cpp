@@ -21,6 +21,7 @@ Scene::Scene() {
     this->gameState = GAME_STATE_MAX;
     this->playerType = PLAYER_TYPE_MAX;
     this->pingTimeFromOtherPlayer = 0;
+    this->pingStartTime = 0;
     this->window = nullptr;
     this->statusMsg = "Connecting...";
     this->inputMoveDown = false;
@@ -30,6 +31,7 @@ Scene::Scene() {
     this->player1Score = "0";
     this->player2Score = "0";
     this->goalElapsedTime = 0.0f;
+    this->pingElapsed = 0.0f;
 }
 
 Scene::~Scene() {
@@ -113,6 +115,13 @@ void Scene::Update() {
             }
         }
         physicsSolver.UpdateSolver();
+        
+        // send ping
+        this->pingElapsed+=Timer::getDtinSec();
+        if (this->pingElapsed > 2.0f) {
+            SendPing();
+            this->pingElapsed = 0.0f;
+        }
     }
 }
 
@@ -146,14 +155,14 @@ void Scene::DrawStats() {
     glPushMatrix();
     glScalef(1, -1, 1);
     int iterator = 0;
-    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("FPS %3.2f", Timer::getFPS()).c_str(), 45, -(60+(iterator++)*20), 200);
-    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PING %d ms", this->pingTimeFromOtherPlayer).c_str(), 45, -(60+(iterator++)*20), 200);
+//    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("FPS %3.2f", Timer::getFPS()).c_str(), 45, -(60+(iterator++)*20), 200);
+//    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PING %d ms", this->pingTimeFromOtherPlayer).c_str(), 45, -(60+(iterator++)*20), 200);
     if (this->gameState == GAME_START) {
         geFontManager::g_pFontArial10_84Ptr->drawString((this->playerType == PLAYER_FIRST) ? "PLAYER 1" : "PLAYER 2", 45, -(60+(iterator++)*20), 200);
     }
-    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("ELAPSED %lu ms", this->physicsSolver.GetElapsedTime()).c_str(), 45, -(60+(iterator++)*20), 200);
-    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("STATUS : %s", this->statusMsg.c_str()).c_str(), 45, -(60+(iterator++)*20), 200);
-    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("BALL VEL : %d", XTOI(this->ball.GetRBVelocity().lengthx())).c_str(), 45, -(60+(iterator++)*20), 200);
+//    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("ELAPSED %lu ms", this->physicsSolver.GetElapsedTime()).c_str(), 45, -(60+(iterator++)*20), 200);
+//    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("STATUS : %s", this->statusMsg.c_str()).c_str(), 45, -(60+(iterator++)*20), 200);
+//    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("BALL VEL : %d", XTOI(this->ball.GetRBVelocity().lengthx())).c_str(), 45, -(60+(iterator++)*20), 200);
 
     geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PLAYER 1: %s", player1Score.c_str()).c_str(), windowSize.x*0.09f, -(windowSize.y*0.85f), 200);
     geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PLAYER 2: %s", player2Score.c_str()).c_str(), windowSize.x*0.82f, -(windowSize.y*0.85f), 200);
@@ -214,7 +223,16 @@ void Scene::ApplyBoost() {
 void Scene::StartGameFromMenu() {
     if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
         NetworkManager::GetInstance().SendMessage("ping");
-        pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec();
+        pingTimeFromOtherPlayer = 0;
+        pingStartTime = Timer::getCurrentTimeInMilliSec();
+    }
+}
+
+void Scene::SendPing() {
+    if (this->gameState == GAME_START ) {
+        NetworkManager::GetInstance().SendMessage("ping");
+        pingTimeFromOtherPlayer = 0;
+        pingStartTime = Timer::getCurrentTimeInMilliSec();
     }
 }
 
@@ -233,10 +251,11 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                 this->physicsSolver.AddBoxCollider(&player2);
             }
             NetworkManager::GetInstance().SendMessage("ping");
-            pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec();
+            pingTimeFromOtherPlayer = 0;
+            pingStartTime = Timer::getCurrentTimeInMilliSec();
         }
     } else if (msg == "ping") {
-        pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec()-pingTimeFromOtherPlayer;
+        pingTimeFromOtherPlayer = Timer::getCurrentTimeInMilliSec()-pingStartTime;
         printf("PING TIME %lu ms.\n", pingTimeFromOtherPlayer);
         if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
             NetworkManager::GetInstance().SendMessage("ping_akn");
