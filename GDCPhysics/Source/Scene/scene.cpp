@@ -12,6 +12,13 @@
 #include "../Physics/core/Timer.h"
 #include "../Physics/core/util.h"
 
+#define BOTTOM_TOP_WALL_HEIGHTx  ITOX(40)
+#define LEFT_RIGHT_WALL_WIDTHx  ITOX(40)
+#define BALL_SIZE 35
+#define PLAYER_WIDTHx ITOX(35)
+#define PLAYER_START_X_POSx ITOX(45)
+#define BALL_INIT_LATERAL_FORCEx vector2x(-ITOX(5000), 0)
+
 Scene& Scene::GetInstance() {
     static Scene instance;
     return instance;
@@ -50,15 +57,11 @@ void Scene::InitScene(SDL_Window* window, float cx, float cy) {
 
 void Scene::InternalGLStates() {
     glClearColor(0.15f, 0.15f, 0.15f, 1.0f);
-//    glShadeModel(GL_FLAT);                          // Enable Smooth Shading
-    glClearDepth(1.0f);                             // Depth Buffer Setup
+    glClearDepth(1.0f);                                 // Depth Buffer Setup
     glCullFace(GL_BACK);
     glEnable(GL_CULL_FACE);                             // Enable culling
     glDepthFunc(GL_LEQUAL);                             // The Type Of Depth Testing To Do (GL_LEQUAL is must for shadow fonts)
     glEnable(GL_DEPTH_TEST);                            // Enables Depth Testing
-    
-//    glEnable( GL_LINE_SMOOTH );
-//    glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 }
 
 void Scene::Resize(float cx, float cy) {
@@ -73,26 +76,24 @@ void Scene::Resize(float cx, float cy) {
     glLoadIdentity();
 }
 
-void Scene::Update() {
-    Timer::update();
+void Scene::OnFixedUpdate(intx fixedDT) {
     if (this->gameState == GAME_START) {
-        
-        this->goalElapsedTime+= Timer::getDtinSec();
+        this->goalElapsedTime += XTOF(fixedDT);
         
         // procss input
         if (this->inputMoveDown || this->inputMoveUp) {
             if (this->inputMoveDown) {
                 if (this->playerType == PLAYER_FIRST) {
-                    this->player1.MoveDown();
+                    this->player1.MoveDown(fixedDT);
                 } else if (this->playerType == PLAYER_SECOND) {
-                    this->player2.MoveDown();
+                    this->player2.MoveDown(fixedDT);
                 }
             }
             if (this->inputMoveUp) {
                 if (this->playerType == PLAYER_FIRST) {
-                    this->player1.MoveUp();
+                    this->player1.MoveUp(fixedDT);
                 } else if (this->playerType == PLAYER_SECOND) {
-                    this->player2.MoveUp();
+                    this->player2.MoveUp(fixedDT);
                 }
             }
         }
@@ -101,27 +102,33 @@ void Scene::Update() {
         if (this->remoteInputMoveDown || this->remoteInputMoveUp) {
             if (this->remoteInputMoveDown) {
                 if (this->playerType == PLAYER_FIRST) {
-                    this->player2.MoveDown();
+                    this->player2.MoveDown(fixedDT);
                 } else if (this->playerType == PLAYER_SECOND) {
-                    this->player1.MoveDown();
+                    this->player1.MoveDown(fixedDT);
                 }
             }
             if (this->remoteInputMoveUp) {
                 if (this->playerType == PLAYER_FIRST) {
-                    this->player2.MoveUp();
+                    this->player2.MoveUp(fixedDT);
                 } else if (this->playerType == PLAYER_SECOND) {
-                    this->player1.MoveUp();
+                    this->player1.MoveUp(fixedDT);
                 }
             }
         }
-        physicsSolver.UpdateSolver();
         
         // send ping
-        this->pingElapsed+=Timer::getDtinSec();
+        this->pingElapsed += XTOF(fixedDT);
         if (this->pingElapsed > 2.0f) {
             SendPing();
             this->pingElapsed = 0.0f;
         }
+    }
+}
+
+void Scene::Update() {
+    Timer::update();
+    if (this->gameState == GAME_START) {
+        physicsSolver.UpdateSolver();
     }
 }
 
@@ -191,8 +198,9 @@ void Scene::MoveStrickerUP(bool keyDown) {
             msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
         }
         NetworkManager::GetInstance().SendMessage(msg);
+        this->inputMoveUp = keyDown;
+//        printf("INPUT UP\n");
     }
-    this->inputMoveUp = keyDown;
 }
 
 void Scene::MoveStrickerDown(bool keyDown) {
@@ -206,8 +214,9 @@ void Scene::MoveStrickerDown(bool keyDown) {
             msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
         }
         NetworkManager::GetInstance().SendMessage(msg);
+        this->inputMoveDown = keyDown;
+//        printf("INPUT DOWN\n");
     }
-    this->inputMoveDown = keyDown;
 }
 
 void Scene::ApplyBoost() {
@@ -237,8 +246,7 @@ void Scene::SendPing() {
 }
 
 void Scene::OnNetworkMessage(const std::string& msg) {
-    printf("Msg from other player %s\n", msg.c_str());
-    
+//    printf("Msg from other player %s\n", msg.c_str());
     if (msg == "first" || msg == "second") {
         if (this->gameState == GAME_INIT || this->gameState == GAME_RESET) {
             this->physicsSolver.RemoveBoxCollider(&player1);
@@ -335,7 +343,7 @@ void Scene::OnNetworkFail() {
 }
 
 void Scene::OnNetworkOpen() {
-    NetworkManager::GetInstance().SendMessage("Hello from Mac");
+    NetworkManager::GetInstance().SendMessage("Hello from other player.");
     statusMsg = "CONNECTED";
 }
 
@@ -379,23 +387,31 @@ void Scene::OnGameInit() {
     InternalGLStates();
     
     // init scene
-    physicsSolver.InitSolver();
-    ball.initBall(35.0f, 1.0f, vector2x(FTOX(windowSize.x*0.5f), FTOX(windowSize.y*0.75f)));
-    ground.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, 0));
-    leftWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(0, 0));
-    rightWall.InitBoxCollider(vector2x(ITOX(40), FTOX(windowSize.y)), vector2x(FTOX(windowSize.x-40.0f), 0));
-    topWall.InitBoxCollider(vector2x(FTOX(windowSize.x), ITOX(40)), vector2x(0, FTOX(windowSize.y-40.0f)));
-    ball.AddForce(vector2x(FTOX(-5000.0f), 0));
+    physicsSolver.InitSolver(this);
+    ball.initBall(BALL_SIZE, 1.0f, vector2x(FTOX(windowSize.x*0.5f), FTOX(windowSize.y*0.75f)));
+    ground.InitBoxCollider(vector2x(FTOX(windowSize.x), BOTTOM_TOP_WALL_HEIGHTx), vector2x(0, 0));
+    leftWall.InitBoxCollider(vector2x(LEFT_RIGHT_WALL_WIDTHx, FTOX(windowSize.y)), vector2x(0, 0));
+    rightWall.InitBoxCollider(vector2x(LEFT_RIGHT_WALL_WIDTHx, FTOX(windowSize.y)), vector2x(FTOX(windowSize.x)-LEFT_RIGHT_WALL_WIDTHx, 0));
+    topWall.InitBoxCollider(vector2x(FTOX(windowSize.x), BOTTOM_TOP_WALL_HEIGHTx), vector2x(0, FTOX(windowSize.y)-BOTTOM_TOP_WALL_HEIGHTx));
+    ball.AddForce(BALL_INIT_LATERAL_FORCEx);
     
     ground.SetWallType(Wall::BOTTOM);
     leftWall.SetWallType(Wall::LEFT);
     rightWall.SetWallType(Wall::RIGHT);
     topWall.SetWallType(Wall::TOP);
     
-    player1.InitBoxCollider(vector2x(ITOX(35), FTOX(windowSize.y*0.25f)), vector2x(ITOX(45), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
-    player2.InitBoxCollider(vector2x(ITOX(35), FTOX(windowSize.y*0.25f)), vector2x(FTOX(windowSize.x-80.0f), FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f))));
-    player1.SetWindowHeight(this->windowSize.y);
-    player2.SetWindowHeight(this->windowSize.y);
+    intx strickerHeight = FTOX(windowSize.y*0.25f);
+    intx strickerStartYPos = FTOX(windowSize.y*0.5f-(windowSize.y*0.25f*0.5f));
+    player1.InitBoxCollider(vector2x(PLAYER_WIDTHx, strickerHeight),
+                            vector2x(PLAYER_START_X_POSx,
+                                     strickerStartYPos)
+                            );
+    player2.InitBoxCollider(vector2x(PLAYER_WIDTHx, strickerHeight),
+                            vector2x(FTOX(windowSize.x)-(PLAYER_START_X_POSx+PLAYER_WIDTHx),
+                                     strickerStartYPos)
+                            );
+    player1.SetWindowAndBottomWallHeight(ITOX((int)this->windowSize.y), BOTTOM_TOP_WALL_HEIGHTx);
+    player2.SetWindowAndBottomWallHeight(ITOX((int)this->windowSize.y), BOTTOM_TOP_WALL_HEIGHTx);
 
     physicsSolver.AddRigidBody(&ball);
     physicsSolver.AddBoxCollider(&ground);

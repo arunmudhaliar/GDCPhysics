@@ -10,33 +10,44 @@
 #include "../Physics/core/Timer.h"
 #include "ball.h"
 
+#define TOP_BOTTOM_BUFFER_HEIGHT    ITOX(4)
+
 Stricker::Stricker() : BoxCollider() {
-    windowHeight = 600.0f;
+    // default value. Calculate and assign it at runtime.
+    this->windowHeight = ITOX(600);
+    this->bottomWallHeight = ITOX(45);
 }
 
 Stricker::~Stricker() {
 }
 
-void Stricker::MoveUp() {
-    float speed = 300.0f;
-    position += vector2x(0, FTOX(speed*Timer::getDtinSec()));
-    if (XTOF(position.y)>windowHeight*0.68f) {
-        position.y = FTOX(windowHeight*0.68f);
+void Stricker::SetWindowAndBottomWallHeight(intx windowdHeight, intx bottomWallHeight) {
+    this->windowHeight = windowdHeight;
+    this->bottomWallHeight = bottomWallHeight;
+}
+
+void Stricker::MoveUp(intx fixedDT) {
+    intx speed = ITOX(300);
+    position += vector2x(0, MULTX(speed, fixedDT));
+    intx validAreaToMove = windowHeight-(size.y+bottomWallHeight+TOP_BOTTOM_BUFFER_HEIGHT);
+    if (position.y > validAreaToMove) {
+        position.y = validAreaToMove;
     }
 }
 
-void Stricker::MoveDown() {
-    float speed = 300.0f;
-    position += vector2x(0, -FTOX(speed*Timer::getDtinSec()));
+void Stricker::MoveDown(intx fixedDT) {
+    intx speed = ITOX(300);
+    position += vector2x(0, -MULTX(speed, fixedDT));
     
-    if (XTOF(position.y)<windowHeight*0.07f) {
-        position.y = FTOX(windowHeight*0.07f);
+    intx validAreaToMove = bottomWallHeight+TOP_BOTTOM_BUFFER_HEIGHT;
+    if (position.y < validAreaToMove) {
+        position.y = validAreaToMove;
     }
 }
 
 void Stricker::OnCollidedWithRB(RigidBody* rb, const vector2x& contactPt, const vector2x& contactNormal) {
     vector2x n = contactNormal;
-    rb->AddForce(n * ITOX(1000));
+    rb->AddForce(n * ITOX(2000));
 }
 
 void Stricker::OnRender() {
@@ -46,7 +57,6 @@ void Stricker::OnRender() {
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(2, GL_FLOAT, 0, vertexBuffer);
     glDrawArrays(GL_QUADS, 0, 4);
-//    glDrawElements(<#GLenum mode#>, <#GLsizei count#>, <#GLenum type#>, <#const GLvoid *indices#>)(GL_LINE_LOOP, 0, 4);
     glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
 }

@@ -17,16 +17,17 @@
 #define GRAVITY -ITOX(100)
 
 Solver::Solver() {
+    this->fixedDTObserver = nullptr;
     this->elapsedTime = 0;
     this->currentTime = 0;
     this->accumulator = 0;
 }
 
 Solver::~Solver() {
-    
 }
 
-void Solver::InitSolver() {
+void Solver::InitSolver(FixedUpdateObserver* fixedDTObserver) {
+    this->fixedDTObserver = fixedDTObserver;
     this->elapsedTime = 0;
     this->currentTime = Timer::getCurrentTimeInMilliSec();
     this->accumulator = 0;
@@ -62,6 +63,9 @@ void Solver::UpdateSolver() {
     this->accumulator += frameTime;
     
     while ( this->accumulator >= FIXED_DT_READABLE ) {
+        if (this->fixedDTObserver) {
+            this->fixedDTObserver->OnFixedUpdate(FIXED_DT);
+        }
         UpdatePhysics(FTOX(this->elapsedTime/1000.0f), FIXED_DT);
         this->elapsedTime += FIXED_DT_READABLE;
         this->accumulator -= FIXED_DT_READABLE;

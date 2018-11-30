@@ -16,13 +16,15 @@ public:
     Stricker();
     virtual ~Stricker();
     
-    void MoveUp();
-    void MoveDown();
-    void SetWindowHeight(float height)    { windowHeight = height; }
+    void MoveUp(intx fixedDT);
+    void MoveDown(intx fixedDT);
+    void SetWindowAndBottomWallHeight(intx windowdHeight, intx bottomWallHeight);
+    
 protected:
     void OnCollidedWithRB(RigidBody* rb, const vector2x& contactPt, const vector2x& contactNormal) override;
     void OnRender() override;
     
-    float windowHeight;
+    intx windowHeight;
+    intx bottomWallHeight;
 };
 #endif /* stricker_hpp */

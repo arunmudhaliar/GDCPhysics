@@ -14,12 +14,17 @@
 #include "rigidBody.h"
 #include "colliders/boxCollider.hpp"
 
+class FixedUpdateObserver {
+public:
+    virtual void OnFixedUpdate(intx fixedDT) = 0;
+};
+
 class Solver {
 public:
     Solver();
     ~Solver();
     
-    void InitSolver();
+    void InitSolver(FixedUpdateObserver* fixedDTObserver);
     void AddRigidBody(RigidBody* rb);
     void AddBoxCollider(BoxCollider* collider);
     void RemoveRigidBody(RigidBody* rb);
@@ -39,5 +44,7 @@ private:
     unsigned long elapsedTime;
     unsigned long currentTime;
     unsigned long accumulator;
+    
+    FixedUpdateObserver* fixedDTObserver;
 };
 #endif /* solver_hpp */

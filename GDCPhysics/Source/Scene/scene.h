@@ -17,7 +17,7 @@
 #include "../GUI/geFontManager.h"
 #include <SDL2/SDL.h>
 
-class Scene : protected NetworkManagerDelegate {
+class Scene : protected NetworkManagerDelegate, protected FixedUpdateObserver {
 private:
     Scene();
     
@@ -65,6 +65,8 @@ protected:
     Stricker player2;
     
     void ApplyBoost();
+    
+    void OnFixedUpdate(intx fixedDT) override;
     
     // NetworkManagerDelegate
     void OnNetworkMessage(const std::string& msg) override;
