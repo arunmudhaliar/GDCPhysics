@@ -163,11 +163,11 @@ void Scene::DrawStats() {
     glScalef(1, -1, 1);
     int iterator = 0;
 //    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("FPS %3.2f", Timer::getFPS()).c_str(), 45, -(60+(iterator++)*20), 200);
-//    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PING %d ms", this->pingTimeFromOtherPlayer).c_str(), 45, -(60+(iterator++)*20), 200);
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("PING %d ms", this->pingTimeFromOtherPlayer).c_str(), 45, -(60+(iterator++)*20), 200);
     if (this->gameState == GAME_START) {
         geFontManager::g_pFontArial10_84Ptr->drawString((this->playerType == PLAYER_FIRST) ? "PLAYER 1" : "PLAYER 2", 45, -(60+(iterator++)*20), 200);
     }
-//    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("ELAPSED %lu ms", this->physicsSolver.GetElapsedTime()).c_str(), 45, -(60+(iterator++)*20), 200);
+    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("ELAPSED %lu ms", this->physicsSolver.GetElapsedTime()).c_str(), 45, -(60+(iterator++)*20), 200);
 //    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("STATUS : %s", this->statusMsg.c_str()).c_str(), 45, -(60+(iterator++)*20), 200);
 //    geFontManager::g_pFontArial10_84Ptr->drawString(util::stringFormat("BALL VEL : %d", XTOI(this->ball.GetRBVelocity().lengthx())).c_str(), 45, -(60+(iterator++)*20), 200);
 
@@ -192,10 +192,10 @@ void Scene::MoveStrickerUP(bool keyDown) {
         std::string msg = (keyDown) ? "stricker_up|1" : "stricker_up|0";
         if (this->playerType == PLAYER_FIRST) {
             auto pos = this->player1.GetPosition();
-            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+            msg+=util::stringFormat("|%d,%d|%lu", pos.x, pos.y, physicsSolver.GetElapsedTime());
         } else if (this->playerType == PLAYER_SECOND) {
             auto pos = this->player2.GetPosition();
-            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+            msg+=util::stringFormat("|%d,%d|%lu", pos.x, pos.y, physicsSolver.GetElapsedTime());
         }
         NetworkManager::GetInstance().SendMessage(msg);
         this->inputMoveUp = keyDown;
@@ -208,10 +208,10 @@ void Scene::MoveStrickerDown(bool keyDown) {
         std::string msg = (keyDown) ? "stricker_down|1" : "stricker_down|0";
         if (this->playerType == PLAYER_FIRST) {
             auto pos = this->player1.GetPosition();
-            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+            msg+=util::stringFormat("|%d,%d|%lu", pos.x, pos.y, physicsSolver.GetElapsedTime());
         } else if (this->playerType == PLAYER_SECOND) {
             auto pos = this->player2.GetPosition();
-            msg+=util::stringFormat("|%d,%d", pos.x, pos.y);
+            msg+=util::stringFormat("|%d,%d|%lu", pos.x, pos.y, physicsSolver.GetElapsedTime());
         }
         NetworkManager::GetInstance().SendMessage(msg);
         this->inputMoveDown = keyDown;
@@ -298,7 +298,7 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                     intx fy = atoi(args[1].c_str());
                     this->ball.AddForce(vector2x(fx, fy));
                 }
-            } else if (lines[0] == "stricker_up" && lines.size()==3) {
+            } else if (lines[0] == "stricker_up" && lines.size()==4) {
                 int val = atoi(lines[1].c_str());
                 this->remoteInputMoveUp = (val==1);
                 std::vector<std::string> args;
@@ -312,7 +312,9 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                         this->player1.SetPosition(vector2x(px, py));
                     }
                 }
-            } else if (lines[0] == "stricker_down" && lines.size()==3) {
+                unsigned long remoteElapsedTime = atol(lines[3].c_str());
+                remoteElapsedTime;
+            } else if (lines[0] == "stricker_down" && lines.size()==4) {
                 int val = atoi(lines[1].c_str());
                 this->remoteInputMoveDown = (val==1);
                 std::vector<std::string> args;
@@ -326,6 +328,8 @@ void Scene::OnNetworkMessage(const std::string& msg) {
                         this->player1.SetPosition(vector2x(px, py));
                     }
                 }
+                unsigned long remoteElapsedTime = atol(lines[3].c_str());
+                remoteElapsedTime;
             } else if (lines[0] == "score" && lines.size()==2) {
                 std::vector<std::string> args;
                 util::splitString(lines[1], args, ',');
