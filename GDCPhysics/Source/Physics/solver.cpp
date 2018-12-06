@@ -73,6 +73,7 @@ void Solver::UpdateSolver() {
 }
 
 void Solver::UpdatePhysics(intx t, intx fixedDT) {
+    // Euler integrator.
     vector2x outDisplacement;
     vector2x outVelocity;
     std::vector<BoxCollider*> outColliders;
@@ -88,9 +89,10 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
         if (collisionHappened) {
             vector2x oldVel = vel+outVelocity;
             int vel_mag = oldVel.lengthx();
-//            printf("vel %f\n", XTOF(vel_mag));
             oldVel.normalizex();
             
+            // bounce impulse.
+            // TODO (amudaliar) : Move this force values as collider properties.
             intx impulseForce = vel_mag;
             if (vel_mag > FTOX(5.0f)) {
                 if (vel_mag > ITOX(600)) {
@@ -102,7 +104,7 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
                 }
             }
             
-            // (amudaliar) : uncomment this code for gradual reduction of velocity.
+            // (amudaliar) : Uncomment this code for gradual reduction of velocity.
             // vel_mag = MULTX(vel_mag, FTOX(0.8f));
             //
             
@@ -124,11 +126,9 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
 }
 
 void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal, std::vector<BoxCollider*>& colliders) {
-//    printf("newPos %f, %f\n", XTOF(newPos.x), XTOF(newPos.y));
     collisionHappened = false;
     int collision_check_cntr=5;
     colliders.clear();
-    //bool bCollision=true;
     while(collision_check_cntr--) {
         bool bPenitration = false;
         vector2x avgPos;
@@ -141,14 +141,16 @@ void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, boo
             vector2x topLeft(boxCollider->GetTopLeft());
             vector2x topRight(boxCollider->GetTopRight());
 
+            // Overlap test. Simple box-circle collision.
+            // TODO (amudaliar) : Do sweap test for collision miss on bigger displacements.
             vector2x closestPt[4];
             closestPt[0]=(util::closestPointOnLine(newPos, bottomLeft, bottomRight));
             closestPt[1]=(util::closestPointOnLine(newPos, bottomRight, topRight));
             closestPt[2]=(util::closestPointOnLine(newPos, topRight, topLeft));
             closestPt[3]=(util::closestPointOnLine(newPos, topLeft, bottomLeft));
 
-            // check for penetration
-            // Note: we are not checking penitration for now.
+            // Check for penetration
+            // Note: We are not checking penitration for now.
             bPenitration = false;
             
             //which one is the closest
@@ -167,7 +169,7 @@ void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, boo
                     }
                     
                     if(closest_length <= radiusSq) {
-                        //collision occured
+                        // Collision occured
                         diff.normalizex();
                         intx radius = pxMath::SQRT((__int64_t)radiusSq);
                         auto contactPt = closestPt[closest_index];
@@ -189,7 +191,7 @@ void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, boo
             // normali
             avgNrml.normalizex();
             contactNormal = avgNrml;
-            newPos=avgPos;    //this will cause the actor to come to a halt then move away, so i commented this line
+            newPos=avgPos;
             collisionHappened = true;
         } else {
             break;  //break the loop
