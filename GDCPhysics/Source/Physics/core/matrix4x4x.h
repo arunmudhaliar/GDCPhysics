@@ -30,7 +30,7 @@ public:
 	
 	matrix4x4x(int v)
 	{
-		for(register int x=0;x<16;x++)
+		for(int x=0;x<16;x++)
 		{
 			m[x]=v;
 		}		
@@ -51,7 +51,7 @@ public:
 	
 	void copyx(const matrix4x4x& matrix)
 	{
-		for(register int x=0;x<16;x++)
+		for(int x=0;x<16;x++)
 		{
 			m[x]=matrix.m[x];
 		}		
@@ -141,7 +141,7 @@ public:
 		 * dst - pointer to array of 16 no's (invert matrix)
 		 *
 		 *************************************************************/
-		register int i;
+		int i;
 		int tmp[12];	/* temp array for pairs */
 		int src[16];	/* array of transpose source matrix */
 		int det;		/* determinant */
@@ -378,12 +378,12 @@ public:
     
     void drawGizmo()
     {
-        byte vertxlist[]={
-            0, 0,
-            5, 0,
-            0, 0,
-            0, 5
-        };
+//        byte vertxlist[]={
+//            0, 0,
+//            5, 0,
+//            0, 0,
+//            0, 5
+//        };
         
 //        glPushMatrix();
 //        glMultMatrixx(getMatrix());

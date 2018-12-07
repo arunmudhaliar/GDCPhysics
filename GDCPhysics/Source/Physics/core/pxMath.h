@@ -49,8 +49,7 @@ extern double sqrt(double);
 #endif
 /**/
 
-const static unsigned short SinTable[] =	
-{
+const static unsigned short SinTable[] = {
     0, 71, 142, 214, 285, 356, 428, 499, 570, 640,
     711, 781, 851, 921, 990, 1060, 1129, 1197, 1265, 1333,
     1400, 1467, 1534, 1600, 1665, 1731, 1795, 1859, 1922, 1985,
@@ -63,8 +62,7 @@ const static unsigned short SinTable[] =
     4095
 };
 
-static const unsigned short CosTable[] = 
-{
+static const unsigned short CosTable[] = {
     4096, 4095, 4093, 4090, 4086, 4080, 4073, 4065, 4056, 4045,
     4033, 4020, 4006, 3991, 3974, 3956, 3937, 3917, 3895, 3872,
     3848, 3823, 3797, 3770, 3741, 3712, 3681, 3649, 3616, 3582,
@@ -78,8 +76,7 @@ static const unsigned short CosTable[] =
 };
 
 
-class pxMath
-{
+class pxMath {
 public:
     
 //    static void printSinTable()
@@ -91,28 +88,23 @@ public:
 //        }
 //    }
 
-	static float SINF(int ang)
-	{
+	static float SINF(int ang) {
 		return (float)sin(DEG2RAD(ang));
 	}
 
-	static float COSF(int ang)
-	{
+	static float COSF(int ang) {
 		return (float)cos(DEG2RAD(ang));
 	}
 
-	static float SINF(float ang)
-	{
+	static float SINF(float ang) {
 		return (float)sin(DEG2RAD(ang));
 	}
 
-	static float COSF(float ang)
-	{
+	static float COSF(float ang) {
 		return (float)cos(DEG2RAD(ang));
 	}
 
-	static int SINX(int i)
-	{
+	static int SINX(int i) {
 		i = i%360;
 		if(i<0)		i += 360;
 
@@ -122,8 +114,7 @@ public:
 		else						return(-SinTable[360-i]);
 	}
 
-	static int COSX(int i)
-	{
+	static int COSX(int i) {
 		i = i%360;
 		if(i<0)		i += 360;
 
@@ -134,73 +125,66 @@ public:
 	}
 
 
-	static float SQRT(float val)
-	{
+	static float SQRT(float val) {
 		return (float)sqrt(val);
 	}
 	
-	static unsigned int SQRT(unsigned int val)
-	{
-		return FTOX(SQRT(XTOF(val)));
-	}
-
-	static unsigned int SQRT(__int64_t val)
-	{
-		return FTOX(SQRT(XTOF(val)));
-	}
+//    static unsigned int SQRT(unsigned int val)
+//    {
+//        return FTOX(SQRT(XTOF(val)));
+//    }
+//
+//    static unsigned int SQRT(__int64_t val)
+//    {
+//        return FTOX(SQRT(XTOF(val)));
+//    }
 	
-	static int RAND(int min, int max)
-	{
+	static int RAND(int min, int max) {
 		int r=rand();
 		int val=min+r%(max-min);
-		if(val<min || val>=max)
-		{
+		if(val<min || val>=max) {
 			//NSLog(@"wrong");
 		}
 		return val;
 	}
 	
-//#define STEP(shift)												\
-//	if(sqrtVal+(PXfixed)((PXint)0x40000000l>>shift) <= val)		\
-//	{															\
-//	val -= sqrtVal+(PXfixed)((PXint)0x40000000l>>shift);	\
-//	sqrtVal = (sqrtVal>>1) | (PXint)((PXint)0x40000000l>>shift);	\
-//	}															\
-//		else														\
-//	{															\
-//	sqrtVal >>= 1;											\
-//	}
-//
-//	static PXfixed SQRT(PXfixed val)
-//	{
-//		// Note: This fast square root function only works with an even Q_FACTOR
-//		PXfixed sqrtVal = 0;
-//
-//		STEP(0);
-//		STEP(2);
-//		STEP(4);
-//		STEP(6);
-//		STEP(8);
-//		STEP(10);
-//		STEP(12);
-//		STEP(14);
-//		STEP(16);
-//		STEP(18);
-//		STEP(20);
-//		STEP(22);
-//		STEP(24);
-//		STEP(26);
-//		STEP(28);
-//		STEP(30);
-//
-//		if(sqrtVal < val)
-//		{
-//			++sqrtVal;
-//		}
-//
-//		sqrtVal <<= (Q_FACTOR>>1);
-//		return(sqrtVal);
-//	}
+#define STEP(shift)                                                             \
+    if(sqrtVal+(__int64_t)((unsigned int)0x40000000l>>shift) <= val) {          \
+        val -= sqrtVal+(__int64_t)((unsigned int)0x40000000l>>shift);           \
+        sqrtVal = (sqrtVal>>1) | (__int64_t)((unsigned int)0x40000000l>>shift); \
+    } else {                                                                    \
+        sqrtVal >>= 1;                                                          \
+    }
+
+    static __int64_t SQRT(__int64_t val) {
+        // Note: This fast square root function only works with an even Q_FACTOR
+        __int64_t sqrtVal = 0;
+
+        STEP(0);
+        STEP(2);
+        STEP(4);
+        STEP(6);
+        STEP(8);
+        STEP(10);
+        STEP(12);
+        STEP(14);
+        STEP(16);
+        STEP(18);
+        STEP(20);
+        STEP(22);
+        STEP(24);
+        STEP(26);
+        STEP(28);
+        STEP(30);
+
+        if(sqrtVal < val)
+        {
+            ++sqrtVal;
+        }
+
+        sqrtVal <<= (Q_FACTOR>>1);
+        return(sqrtVal);
+    }
 };
 
 

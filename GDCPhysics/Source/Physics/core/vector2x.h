@@ -38,7 +38,7 @@ public:
 	void zerox()						{	x=y=0;	}
 	
 	__int64_t lengthSquaredx()				{	return MULTX64(x, x)+MULTX64(y, y);			}
-	unsigned int lengthx()						{	return pxMath::SQRT(lengthSquaredx());	}
+	__int64_t lengthx()						{	return pxMath::SQRT(lengthSquaredx());	}
 	__int64_t dotx(const vector2x& v)		{	return MULTX(x, v.x)+MULTX(y, v.y);		}
 	
 //	vector2x cross(const vector2x& v)
@@ -50,7 +50,7 @@ public:
 //		return res;
 //	}
 	
-	int normalizex()
+	__int64_t normalizex()
 	{
 		__int64_t n, oon;
 		n=lengthSquaredx();
@@ -59,16 +59,16 @@ public:
 		n=pxMath::SQRT(n);
 		oon = FX_ONE;
 		
-        float oonf = 1.0f/XTOF(n);
-        x = FTOX(XTOF(x)*oonf);
-        y = FTOX(XTOF(y)*oonf);
-        return FTOX(oonf);
-//        oon=DIVX(oon, n);
-//
-//        x=MULTX(x, oon);
-//        y=MULTX(y, oon);
-		
-//        return oon;
+        // Due to precision loss we multiply the numerator by 10 and divide after the calculations.
+        // Note :- We did this because we know the square root values will be lesser. Don't use this for normal calculation involving big numbers.
+        // It can overflow for big numbers.
+        oon = ITOX((__int64_t)oon*10)/n;
+        x=MULTX(x, oon);
+        y=MULTX(y, oon);
+        x/=10;
+        y/=10;
+        oon/=10;
+        return oon;
 	}
 	
 };

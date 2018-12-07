@@ -88,17 +88,19 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
         CheckCollisions(rb, newPos, rb->GetRadiusSq(), collisionHappened, contactNormal, outColliders);
         if (collisionHappened) {
             vector2x oldVel = vel+outVelocity;
-            int vel_mag = oldVel.lengthx();
+            int vel_mag = (int)oldVel.lengthx();
             oldVel.normalizex();
             
             // bounce impulse.
             // TODO (amudaliar) : Move this force values as collider properties.
             intx impulseForce = vel_mag;
-            if (vel_mag > FTOX(5.0f)) {
+            const intx vel_threshold = 20480;    // 5
+            if (vel_mag > vel_threshold) {
                 if (vel_mag > ITOX(600)) {
                     vel_mag = ITOX(600);
                 }
-                impulseForce = MULTX(vel_mag, FTOX(25.0f));
+                intx impulseFactor = 102400;    //25
+                impulseForce = MULTX(vel_mag, impulseFactor);
                 if (impulseForce > ITOX(8000)) {
                     impulseForce = ITOX(8000);
                 }
@@ -110,7 +112,8 @@ void Solver::UpdatePhysics(intx t, intx fixedDT) {
             
             auto newVel = (oldVel + contactNormal) * vel_mag;
             rb->SetRBVelocity(newVel);
-            newPos = newPos + contactNormal*FTOX(0.1f);
+            const intx degenerationFactor = 409;  //0.1f
+            newPos = newPos + contactNormal*degenerationFactor;
             rb->SetRBPosition(newPos, true);
             
             rb->AddForce(contactNormal * impulseForce);
@@ -171,7 +174,7 @@ void Solver::CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, boo
                     if(closest_length <= radiusSq) {
                         // Collision occured
                         diff.normalizex();
-                        intx radius = pxMath::SQRT((__int64_t)radiusSq);
+                        intx radius = (intx)pxMath::SQRT((__int64_t)radiusSq);
                         auto contactPt = closestPt[closest_index];
                         vector2x calc_Pos(contactPt + diff*radius);
                         avgPos+=calc_Pos;
