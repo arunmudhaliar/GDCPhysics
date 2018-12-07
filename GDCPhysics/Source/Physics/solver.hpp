@@ -37,13 +37,14 @@ private:
     std::vector<RigidBody*> rigidBodies;
     std::vector<BoxCollider*> boxColliders;
     
-    void UpdatePhysics(intx t, intx fixedDT);
+    void UpdatePhysics(__int64_t step, intx fixedDT);
     void CheckCollisions(RigidBody* rb, vector2x& newPos, intx radiusSq, bool& collisionHappened, vector2x& contactNormal, std::vector<BoxCollider*>& colliders);
     
     // timer
     unsigned long elapsedTime;
     unsigned long currentTime;
     unsigned long accumulator;
+    __int64_t simSteps;
     
     FixedUpdateObserver* fixedDTObserver;
 };

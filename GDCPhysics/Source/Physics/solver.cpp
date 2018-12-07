@@ -21,6 +21,7 @@ Solver::Solver() {
     this->elapsedTime = 0;
     this->currentTime = 0;
     this->accumulator = 0;
+    this->simSteps = 0;
 }
 
 Solver::~Solver() {
@@ -31,6 +32,7 @@ void Solver::InitSolver(FixedUpdateObserver* fixedDTObserver) {
     this->elapsedTime = 0;
     this->currentTime = Timer::getCurrentTimeInMilliSec();
     this->accumulator = 0;
+    this->simSteps = 0;
 }
 
 void Solver::AddRigidBody(RigidBody* rb) {
@@ -63,16 +65,17 @@ void Solver::UpdateSolver() {
     this->accumulator += frameTime;
     
     while ( this->accumulator >= FIXED_DT_READABLE ) {
+        this->simSteps++;
         if (this->fixedDTObserver) {
             this->fixedDTObserver->OnFixedUpdate(FIXED_DT);
         }
-        UpdatePhysics(FTOX(this->elapsedTime/1000.0f), FIXED_DT);
+        UpdatePhysics(this->simSteps, FIXED_DT);
         this->elapsedTime += FIXED_DT_READABLE;
         this->accumulator -= FIXED_DT_READABLE;
     }
 }
 
-void Solver::UpdatePhysics(intx t, intx fixedDT) {
+void Solver::UpdatePhysics(__int64_t step, intx fixedDT) {
     // Euler integrator.
     vector2x outDisplacement;
     vector2x outVelocity;
